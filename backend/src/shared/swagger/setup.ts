@@ -12,7 +12,7 @@ export function setupSwagger(
     .setDescription(config.description)
     .setVersion(config.version)
     .addCookieAuth('access_token')
-    .addServer(`${config.scheme}://localhost:8080/api`)
+    .addServer(`${config.scheme}://localhost:8080`)
     .build();
 
   const document: OpenAPIObject = SwaggerModule.createDocument(app, options);
