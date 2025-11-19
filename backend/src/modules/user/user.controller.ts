@@ -53,6 +53,9 @@ export class UserController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Error Get One User.',
   })
+  @ApiCookieAuth('access_token')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('USER')
   @Delete(':id')
   deleteUser(@Param('id') id: string) {
     return this.userService.deleteUser(id);
@@ -70,9 +73,9 @@ export class UserController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Error Get One User.',
   })
-  @ApiCookieAuth('token')
+  @ApiCookieAuth('access_token')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('utilisateur')
+  @Roles('USER')
   @Get('get-user-id')
   findOneUserById(@Query('id') id: string) {
     return this.userService.findOneUserById(id);

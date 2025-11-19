@@ -11,10 +11,16 @@ export function setupSwagger(
     .setTitle(config.title)
     .setDescription(config.description)
     .setVersion(config.version)
-    .addCookieAuth('access_token')
+    .addCookieAuth('access_token', {
+      type: 'apiKey',
+      in: 'cookie',
+      name: 'access_token',
+    })
     .addServer(`${config.scheme}://localhost:8080`)
     .build();
 
   const document: OpenAPIObject = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup(config.path, app, document);
+  SwaggerModule.setup(config.path, app, document, {
+    swaggerOptions: { withCredentials: true },
+  });
 }

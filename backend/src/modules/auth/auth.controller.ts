@@ -109,7 +109,7 @@ export class AuthenticationController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Current User Failed.',
   })
-  @ApiCookieAuth('token')
+  @ApiCookieAuth('access_token')
   @UseGuards(JwtAuthGuard)
   @Get('current')
   async current(@Request() req: any) {
