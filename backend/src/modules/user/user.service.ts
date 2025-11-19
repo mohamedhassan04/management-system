@@ -13,6 +13,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Request } from 'express';
 import { Users } from './entities/user.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -56,6 +57,35 @@ export class UserService {
     return await this._userRepo.findOne({
       where: { email: email },
     });
+  }
+
+  async updateStatusUser(id: string) {
+    const user = await this._userRepo.findOne({
+      where: { id: id },
+    });
+
+    if (user) {
+      user.isActive = !user.isActive;
+      await this._userRepo.save(user);
+      return {
+        status: HttpStatus.OK,
+        success: "Le statut de l'utilisateur a été mis à jour",
+      };
+    }
+  }
+
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this._userRepo.findOne({
+      where: { id: id },
+    });
+
+    if (user) {
+      await this._userRepo.update(id, updateUserDto);
+      return {
+        status: HttpStatus.OK,
+        success: "L'utilisateur a été mis à jour",
+      };
+    }
   }
 
   async deleteUser(id: string) {

@@ -17,6 +17,18 @@ export class Users extends Node {
   @Column({ type: 'varchar' })
   password: string;
 
+  @Column({ type: 'varchar', length: 20 })
+  phone: string;
+
+  @Column({ type: 'varchar', length: 100 })
+  address: string;
+
+  @Column({ type: 'boolean', default: true })
+  isActive: boolean;
+
+  @Column({ type: 'varchar', nullable: true })
+  notes: string;
+
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole;
 }

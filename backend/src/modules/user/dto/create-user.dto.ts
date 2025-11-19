@@ -2,8 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
+  MaxLength,
   MinLength,
 } from 'class-validator';
 
@@ -52,4 +54,30 @@ export class CreateUserDto {
     one special character`,
   })
   password: string;
+
+  @ApiProperty({
+    type: 'string',
+    example: '20 329 911',
+  })
+  @IsString()
+  @MinLength(2, { message: 'Phone must have atleast 2 characters.' })
+  @MaxLength(8, { message: 'Phone must have maximum 8 characters.' })
+  @IsNotEmpty()
+  phone: string;
+
+  @ApiProperty({
+    type: 'string',
+    example: '33 rue de la paix paris',
+  })
+  @IsString()
+  @IsOptional()
+  address?: string;
+
+  @ApiProperty({
+    type: 'string',
+    example: 'Bech i5ales par facilité sur 3 mois',
+  })
+  @IsString()
+  @IsOptional()
+  notes?: string;
 }
