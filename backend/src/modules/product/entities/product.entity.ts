@@ -22,7 +22,7 @@ export class Product extends Node {
   @Index()
   sku: string;
 
-  @Column()
+  @Column({ nullable: true })
   quantity: number;
 
   @Column({

@@ -5,6 +5,7 @@ import { configService } from './config/config.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
       envFilePath: '.env', // Specify the .env file path
     }),
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+    MailerModule.forRoot(configService.smtpEmailConfig()),
     ThrottlerModule.forRoot(configService.getThrottlerConfig()),
     ...AllModules,
   ],

@@ -28,3 +28,24 @@ export class ProductQueryDto {
   @IsString()
   sku?: string;
 }
+
+export class InvoiceQueryDto {
+  @ApiPropertyOptional({ default: 10, description: 'Items per page' })
+  @IsOptional()
+  @IsNumberString()
+  limit?: number;
+
+  @ApiPropertyOptional({ default: 1, description: 'Page number' })
+  @IsOptional()
+  @IsNumberString()
+  page?: number;
+
+  @ApiPropertyOptional({ description: 'Search by due date' })
+  @IsOptional()
+  dueDate?: Date;
+
+  @ApiPropertyOptional({ description: 'Search by status' })
+  @IsOptional()
+  @IsString()
+  status?: string;
+}

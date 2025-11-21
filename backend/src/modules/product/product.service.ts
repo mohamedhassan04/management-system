@@ -32,6 +32,7 @@ export class ProductService {
       product.status = ProductStock.LOW_STOCK;
     }
 
+    product.lastRestock = dayjs().toDate();
     await this._productRepo.save(product);
 
     return {
