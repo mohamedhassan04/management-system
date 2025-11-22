@@ -1,0 +1,29 @@
+@use "./variables";
+
+:global {
+  .ant-modal .ant-modal-content {
+    @include color($bg: variables.$color-bg-gray !important);
+    border-radius: variables.$border-radius-16 !important;
+  }
+  .ant-modal .ant-modal-header {
+    @include color($bg: variables.$color-bg-gray !important);
+  }
+  .ant-divider-horizontal {
+    margin: 1rem 0 !important;
+  }
+}
+.ct--modal-header {
+  text-align: center;
+  span {
+    @include color($text: variables.$color-black);
+    font-family: variables.$font-family-ibm !important;
+    font-weight: variables.$font-weight-semibold;
+    font-variation-settings: "wght" variables.$font-weight-semibold;
+  }
+}
+
+// .ct--close-icon {
+//   @include color($green-card-bg-color);
+//   @include font-size(1.2rem);
+//   cursor: pointer;
+// }

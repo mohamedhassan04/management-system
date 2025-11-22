@@ -1,0 +1,16 @@
+@use "variables";
+@use "mixins";
+@use "fonts";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-normal;
+  font-variation-settings: "wght" variables.$font-weight-normal;
+  @include color($bg: variables.$color-bg-gray);
+}

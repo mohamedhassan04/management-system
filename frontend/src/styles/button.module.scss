@@ -1,0 +1,23 @@
+@use "./variables";
+@use "./mixins";
+
+.ms--button-container {
+  @include fluid-font(0.5, 1);
+  @include color(
+    $bg: variables.$color-primary-purple,
+    $text: variables.$color-white !important
+  );
+  width: 100%;
+  border-radius: variables.$border-radius-12 !important;
+  transition: all 0.3s ease;
+  border: 1px solid variables.$color-primary-purple !important;
+
+  &:hover {
+    @include color(
+      $text: variables.$color-white,
+      $bg: variables.$color-primary-purple-light !important
+    );
+    border: none !important;
+    transform: translateY(-5px);
+  }
+}

@@ -1,0 +1,22 @@
+@use "variables";
+
+@mixin flex($direction: row, $justify: center, $align: center, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  gap: $gap;
+}
+
+@mixin fluid-font($min, $max) {
+  font-size: clamp(#{$min}rem, #{$min}rem + 1vw, #{$max}rem);
+}
+
+@mixin color($text: null, $bg: null) {
+  @if $text {
+    color: $text;
+  }
+  @if $bg {
+    background-color: $bg;
+  }
+}

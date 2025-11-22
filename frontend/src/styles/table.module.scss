@@ -1,0 +1,52 @@
+@use "./variables";
+@use "./mixins";
+
+.ms--table {
+  :global {
+    .ant-table {
+      background-color: variables.$color-white !important;
+      overflow: hidden;
+      border-radius: variables.$border-radius-14 !important;
+      box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+    }
+
+    .ant-table-thead > tr > th {
+      @include color($text: variables.$color-gray-dark);
+      background: variables.$color-white !important;
+      font-family: variables.$font-family-ibm !important;
+      font-weight: variables.$font-weight-semibold !important;
+      font-variation-settings: "wght" variables.$font-weight-semibold !important;
+      border-bottom: none;
+    }
+
+    .ant-table-tbody > tr > td {
+      @include color($text: variables.$color-black-mate);
+      font-family: variables.$font-family-ibm !important;
+      font-weight: variables.$font-weight-normal;
+      font-variation-settings: "wght" variables.$font-weight-normal;
+      padding: 1rem 1rem;
+    }
+
+    .ant-table-tbody > tr:hover {
+      td {
+        background: variables.$color-green-light !important;
+      }
+      td:first-child {
+        border-top-left-radius: variables.$border-radius-12 !important;
+        border-bottom-left-radius: variables.$border-radius-12 !important;
+      }
+
+      td:last-child {
+        border-top-right-radius: variables.$border-radius-12 !important;
+        border-bottom-right-radius: variables.$border-radius-12 !important;
+      }
+    }
+  }
+}
+
+.ms--no-data-text {
+  @include color($text: variables.$color-gray-dark);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-medium !important;
+  font-variation-settings: "wght" variables.$font-weight-medium !important;
+}

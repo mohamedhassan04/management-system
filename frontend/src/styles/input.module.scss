@@ -1,0 +1,38 @@
+@use "./variables";
+@use "./mixins";
+
+.ms--input-wrapper {
+  @include flex(column);
+  width: 100%;
+}
+
+.ms--input-field {
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-normal !important;
+  font-variation-settings: "wght" variables.$font-weight-normal !important;
+  border: 1px solid variables.$color-gray-border !important;
+  border-radius: variables.$border-radius-16 !important;
+
+  &::placeholder {
+    @include color($text: variables.$color-gray-dark !important);
+  }
+
+  :global(.ant-input)::placeholder {
+    @include color($text: variables.$color-gray-dark !important);
+  }
+
+  &:focus,
+  &:hover {
+    border-color: variables.$color-gray-border !important;
+    box-shadow: none !important;
+  }
+}
+
+.ms--input-field :global(.ant-input-suffix .anticon) {
+  @include color($text: variables.$color-gray-dark !important);
+  transition: color 0.2s ease;
+
+  &:hover {
+    @include color($text: variables.$color-gray-dark !important);
+  }
+}
