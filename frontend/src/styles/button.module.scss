@@ -20,4 +20,8 @@
     border: 1px solid variables.$color-primary-purple !important;
     transform: translateY(-5px);
   }
+  &:disabled {
+    @include color($bg: variables.$color-primary-purple-light);
+    border: 1px solid variables.$color-primary-purple-light !important;
+  }
 }

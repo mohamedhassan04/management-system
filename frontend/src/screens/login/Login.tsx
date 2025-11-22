@@ -1,18 +1,30 @@
-import React from "react";
-import { Form, Row, Col } from "antd";
+import React, { useState } from "react";
+import { Form, Row, Col, Spin } from "antd";
 import styles from "../../styles/login.module.scss";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import logo from "../../assets/images/icons/logo.svg";
 
 const Login: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = () => {
+    setLoading(true);
+
+    // Simulate API call
+    setTimeout(() => {
+      setLoading(false);
+      console.log("Login done!");
+    }, 2000);
+  };
+
   return (
     <div className={styles["ms--container"]}>
       <Row justify="center" align="middle" className={styles["ms--row"]}>
-        <Col xxl={6} xl={8} lg={8} md={12} sm={16} xs={22}>
+        <Col xxl={6} xl={8} lg={16} md={16} sm={16} xs={22}>
           <div className={styles["ms--card"]}>
             <div className={styles["ms--logo-container"]}>
-              <img src={logo} alt="logo" />
+              <img src={logo} alt="logo" loading="lazy" />
             </div>
             <h2 className={styles["ms--title"]}>
               Connectez-vous à votre compte
@@ -51,8 +63,12 @@ const Login: React.FC = () => {
                 />
               </Form.Item>
 
-              <Button className={styles["ms--login-btn"]}>
-                <span>Se connecter</span>
+              <Button
+                onClick={handleLogin}
+                disabled={loading}
+                className={styles["ms--login-btn"]}
+              >
+                <span>{loading ? <Spin /> : "Se connecter"}</span>
               </Button>
             </Form>
           </div>

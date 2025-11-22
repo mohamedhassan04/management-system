@@ -1,11 +1,16 @@
 import { Routes, Route } from "react-router-dom";
-import Login from "./screens/login/Login";
+import { lazy, Suspense } from "react";
+import LoadingScreen from "./components/LoadingScreen";
+
+const Login = lazy(() => import("./screens/login/Login"));
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Login />} />
-    </Routes>
+    <Suspense fallback={<LoadingScreen />}>
+      <Routes>
+        <Route path="/" element={<Login />} />
+      </Routes>
+    </Suspense>
   );
 }
 

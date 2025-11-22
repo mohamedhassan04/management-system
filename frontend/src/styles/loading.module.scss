@@ -1,0 +1,23 @@
+@use "./variables";
+@use "./mixins";
+
+.ms--loading-container {
+  @include flex(column, center, center);
+  width: 100%;
+  height: 100vh;
+}
+
+.ms--loading {
+  :global(.ant-spin-dot-item) {
+    @include color($bg: variables.$color-primary-purple);
+  }
+}
+
+.ms--loading-text {
+  @include color($text: variables.$color-gray-dark);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-semibold !important;
+  font-variation-settings: "wght" variables.$font-weight-semibold !important;
+  font-style: italic;
+  margin-top: 0.5rem;
+}
