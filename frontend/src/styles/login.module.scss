@@ -1,0 +1,86 @@
+@use "./variables";
+@use "./mixins";
+
+.ms--container {
+  @include flex(center, center);
+  width: 100%;
+  min-height: 100vh;
+}
+
+.ms--row {
+  width: 100%;
+}
+
+.ms--card {
+  @include color($bg: variables.$color-white);
+  border-radius: variables.$border-radius-16;
+  padding: 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.ms--logo-container {
+  @include flex(center, center);
+  @include color($bg: variables.$color-bg-gray);
+  margin-bottom: 0.5rem;
+  border-radius: variables.$border-radius-16;
+  transition: all 0.3s ease-in-out;
+
+  img {
+    width: 40%;
+    transition: transform 0.6s ease-in-out;
+
+    &:hover {
+      transform: rotate(-45deg) scale(1.05);
+    }
+  }
+}
+
+.ms--title {
+  @include fluid-font(1.2, 1.6);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-semibold !important;
+  font-variation-settings: "wght" variables.$font-weight-semibold !important;
+  text-align: center;
+  margin-bottom: 0.4rem;
+}
+
+.ms--subtitle {
+  @include fluid-font(0.6, 0.9);
+  @include color($text: variables.$color-gray-dark);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-normal !important;
+  font-variation-settings: "wght" variables.$font-weight-normal !important;
+  font-style: oblique;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.ms--label-container {
+  margin-bottom: 0.1rem;
+  span {
+    @include fluid-font(0.6, 0.9);
+    @include color($text: variables.$color-black-mate);
+    font-family: variables.$font-family-ibm !important;
+    font-weight: variables.$font-weight-medium !important;
+    font-variation-settings: "wght" variables.$font-weight-medium !important;
+  }
+}
+
+.ms--input {
+  padding: 0.7rem;
+  border-radius: variables.$border-radius-16 !important;
+}
+
+.ms--login-btn {
+  padding: 1.2rem;
+  border-radius: variables.$border-radius-16 !important;
+  margin-top: 0.5rem;
+  span {
+    @include fluid-font(0.6, 1);
+    @include color($text: variables.$color-white);
+    font-family: variables.$font-family-ibm !important;
+    font-weight: variables.$font-weight-semibold !important;
+    font-variation-settings: "wght" variables.$font-weight-semibold !important;
+  }
+}
