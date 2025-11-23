@@ -1,0 +1,127 @@
+@use "./variables";
+@use "./mixins";
+
+.ms--layout {
+  min-height: 100vh;
+}
+
+.ms--layout-sidebar {
+  @include color($bg: variables.$color-white !important);
+  border-right: 1px solid variables.$color-gray-border;
+  overflow: auto;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  transition: all 0.3s ease;
+}
+
+.ms--layout-logo {
+  @include flex(center, center);
+  @include color($bg: variables.$color-bg-gray);
+  width: 90%;
+  margin: 1rem auto;
+  border-radius: variables.$border-radius-16;
+  transition: all 0.3s ease-in-out;
+
+  img {
+    width: 40%;
+    transition: transform 0.6s ease-in-out;
+
+    &:hover {
+      transform: rotate(-45deg) scale(1.05);
+    }
+  }
+}
+
+.ms--layout-contentWrapper {
+  @include color($bg: variables.$color-bg-gray);
+}
+
+.ms--layout-header {
+  @include color($bg: variables.$color-bg-gray);
+  height: 70px;
+  border-bottom: 1px solid variables.$color-gray-border;
+}
+
+.ms--layout-content {
+  padding: 24px;
+}
+
+.ms--layout-menu {
+  @include fluid-font(0.8, 1);
+  font-weight: variables.$font-weight-semibold !important;
+  font-family: variables.$font-family-ibm !important;
+  font-variation-settings: "wght" variables.$font-weight-semibold;
+  border-inline-end: none !important;
+
+  :global {
+    .ant-menu-item {
+      @include color($text: variables.$color-title-gray !important);
+      border-radius: variables.$border-radius-16 !important;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      .ant-menu-item-icon {
+        @include color($text: variables.$color-title-gray !important);
+        @include fluid-font(0.8, 1.2);
+        svg {
+          @include color($text: variables.$color-title-gray !important);
+          transition: color 0.2s ease;
+        }
+      }
+    }
+    .ant-menu-item-selected {
+      @include color(
+        $text: variables.$color-white !important,
+        $bg: variables.$color-primary-purple-extra-light !important
+      );
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+      .ant-menu-item-icon {
+        @include color($text: variables.$color-white !important);
+        @include fluid-font(0.8, 1.2);
+        svg {
+          @include color($text: variables.$color-white !important);
+        }
+      }
+    }
+  }
+}
+
+// ----- Header style ----
+
+.ms--header-container {
+  @include flex(null, flex-end, center);
+}
+
+.ms--header-avatar {
+  @include color($bg: variables.$color-primary-purple-extra-light);
+  cursor: pointer;
+}
+
+.ms--header-icon-btn {
+  @include color($bg: variables.$color-white);
+  @include flex(center, center);
+  width: 40px;
+  height: 40px;
+  border-radius: variables.$border-radius-14;
+  border: 1px solid variables.$color-gray-border;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.ms--header-icon {
+  @include color($text: variables.$color-gray-dark !important);
+  @include fluid-font(0.8, 1.2);
+}
+
+.ms--header-badge {
+  @include flex(center, center);
+}
