@@ -7,11 +7,13 @@ import styles from "../styles/input.module.scss";
 interface CustomInputProps extends InputProps {
   type?: "text" | "email" | "password";
   className?: string;
+  suffix?: React.ReactNode;
 }
 
 const Input: React.FC<CustomInputProps> = ({
   type = "text",
   className,
+  suffix,
   ...rest
 }) => {
   return (
@@ -25,6 +27,7 @@ const Input: React.FC<CustomInputProps> = ({
         <AntInput
           {...rest}
           type={type}
+          prefix={suffix}
           className={clsx(styles["ms--input-field"], className)}
         />
       )}

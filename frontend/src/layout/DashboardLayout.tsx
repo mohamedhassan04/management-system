@@ -16,6 +16,12 @@ const DashboardLayout = () => {
       <Sider width={240} className={styles["ms--layout-sidebar"]}>
         <div className={styles["ms--layout-logo"]}>
           <img src={logo} alt="ms" loading="lazy" />
+          <div>
+            <p className={styles["ms--layout-logo-text"]}>TijaraSys</p>
+            <p className={styles["ms--layout-logo-slogan"]}>
+              Le stock sous contrôle
+            </p>
+          </div>
         </div>
 
         <Menu

@@ -1,0 +1,83 @@
+@use "./variables";
+@use "./mixins";
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 1px 12px;
+  border-radius: 20px;
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-semibold !important;
+  font-variation-settings: "wght" variables.$font-weight-semibold !important;
+  font-size: 13px;
+  text-transform: capitalize;
+}
+
+/* Small dot */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* -------- Status Styles -------- */
+
+/* Users */
+.active {
+  background: variables.$color-green-light;
+  color: variables.$color-green-primary;
+}
+.active .dot {
+  background: variables.$color-green-primary;
+}
+
+.inactive {
+  background: variables.$color-red-light;
+  color: variables.$color-red-primary;
+}
+.inactive .dot {
+  background: variables.$color-red-primary;
+}
+
+/* Products */
+.in-stock {
+  background: #e8f7ff;
+  color: #0b76c5;
+}
+.in-stock .dot {
+  background: #0b76c5;
+}
+
+.low-stock {
+  background: #fff8e6;
+  color: #c99700;
+}
+.low-stock .dot {
+  background: #c99700;
+}
+
+.out-of-stock {
+  background: #fdeaea;
+  color: #d93030;
+}
+.out-of-stock .dot {
+  background: #d93030;
+}
+
+/* Invoices */
+.paid {
+  background: #e7f6ff;
+  color: #0077ff;
+}
+.paid .dot {
+  background: #0077ff;
+}
+
+.unpaid {
+  background: #fff0e6;
+  color: #ff7a00;
+}
+.unpaid .dot {
+  background: #ff7a00;
+}

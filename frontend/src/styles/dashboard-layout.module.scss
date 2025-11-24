@@ -17,11 +17,10 @@
 
 .ms--layout-logo {
   @include flex(center, center);
-  @include color($bg: variables.$color-bg-gray);
-  width: 90%;
-  margin: 1rem auto;
+  padding: 0.9rem;
   border-radius: variables.$border-radius-16;
   transition: all 0.3s ease-in-out;
+  text-align: left;
 
   img {
     width: 40%;
@@ -30,6 +29,23 @@
     &:hover {
       transform: rotate(-45deg) scale(1.05);
     }
+  }
+  .ms--layout-logo-text {
+    @include fluid-font(0.8, 1.1);
+    @include color($text: variables.$color-primary-purple-dark);
+    font-family: variables.$font-family-ibm !important;
+    font-weight: variables.$font-weight-semibold !important;
+    font-variation-settings: "wght" variables.$font-weight-semibold !important;
+    transition: all 0.3s ease-in-out;
+  }
+  .ms--layout-logo-slogan {
+    @include fluid-font(0.6, 0.8);
+    @include color($text: variables.$color-title-gray);
+    font-family: variables.$font-family-ibm !important;
+    font-weight: variables.$font-weight-normal !important;
+    font-variation-settings: "wght" variables.$font-weight-normal !important;
+    font-style: italic;
+    transition: all 0.3s ease-in-out;
   }
 }
 
@@ -44,22 +60,22 @@
 }
 
 .ms--layout-content {
-  padding: 24px;
+  padding: 0.9rem;
 }
 
 .ms--layout-menu {
   @include fluid-font(0.8, 1);
-  font-weight: variables.$font-weight-semibold !important;
   font-family: variables.$font-family-ibm !important;
-  font-variation-settings: "wght" variables.$font-weight-semibold;
+  font-weight: variables.$font-weight-medium !important;
+  font-variation-settings: "wght" variables.$font-weight-medium;
   border-inline-end: none !important;
 
   :global {
     .ant-menu-item {
       @include color($text: variables.$color-title-gray !important);
       border-radius: variables.$border-radius-16 !important;
-      margin-top: 1rem;
-      margin-bottom: 1rem;
+      width: 85% !important;
+      margin: 1rem auto !important;
       .ant-menu-item-icon {
         @include color($text: variables.$color-title-gray !important);
         @include fluid-font(0.8, 1.2);
@@ -71,12 +87,12 @@
     }
     .ant-menu-item-selected {
       @include color(
-        $text: variables.$color-white !important,
+        $text: variables.$color-primary-purple-dark !important,
         $bg: variables.$color-primary-purple-extra-light !important
       );
       box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
       .ant-menu-item-icon {
-        @include color($text: variables.$color-white !important);
+        @include color($text: variables.$color-primary-purple-dark !important);
         @include fluid-font(0.8, 1.2);
         svg {
           @include color($text: variables.$color-white !important);
@@ -93,7 +109,7 @@
 }
 
 .ms--header-avatar {
-  @include color($bg: variables.$color-primary-purple-extra-light);
+  @include color($bg: variables.$color-primary-purple-dark);
   cursor: pointer;
 }
 

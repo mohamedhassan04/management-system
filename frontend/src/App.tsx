@@ -4,6 +4,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import DashboardLayout from "./layout/DashboardLayout";
 
 const Login = lazy(() => import("./screens/login/Login"));
+const Clients = lazy(() => import("./screens/users/Clients"));
 
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
 
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<h1>Dashboard</h1>} />
-          <Route path="/users" element={<h1>Clients</h1>} />
+          <Route path="/users" element={<Clients />} />
+          <Route path="/invoices" element={<h1>Factures</h1>} />
+          <Route path="/products" element={<h1>Produits</h1>} />
         </Route>
       </Routes>
     </Suspense>

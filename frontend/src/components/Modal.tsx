@@ -4,7 +4,7 @@ import styles from "../styles/modal.module.scss";
 import { MdClose } from "react-icons/md";
 
 export interface ModalComponentProps {
-  title: string;
+  title: React.ReactNode;
   children?: React.ReactNode;
   open?: boolean;
   modalStyle?: React.CSSProperties;

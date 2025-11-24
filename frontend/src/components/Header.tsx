@@ -17,32 +17,37 @@ const HeaderComponent: React.FC = () => {
     ],
   };
   return (
-    <div className={styles["ms--header-container"]}>
-      <Space align="center" size="middle">
-        <button aria-label="Settings" className={styles["ms--header-icon-btn"]}>
-          <IoSettingsOutline className={styles["ms--header-icon"]} />
-        </button>
-        <Badge
-          status="success"
-          count={1}
-          color="#f5a113"
-          className={styles["ms--header-badge"]}
-        >
+    <>
+      <div className={styles["ms--header-container"]}>
+        <Space align="center" size="middle">
           <button
-            aria-label="Notifications"
+            aria-label="Settings"
             className={styles["ms--header-icon-btn"]}
           >
-            <IoMdNotificationsOutline className={styles["ms--header-icon"]} />
+            <IoSettingsOutline className={styles["ms--header-icon"]} />
           </button>
-        </Badge>
-        <Dropdown menu={menuProps} trigger={["click"]}>
-          <Avatar
-            className={styles["ms--header-avatar"]}
-            icon={<UserOutlined />}
-          />
-        </Dropdown>
-      </Space>
-    </div>
+          <Badge
+            status="success"
+            count={1}
+            color="#f05858"
+            className={styles["ms--header-badge"]}
+          >
+            <button
+              aria-label="Notifications"
+              className={styles["ms--header-icon-btn"]}
+            >
+              <IoMdNotificationsOutline className={styles["ms--header-icon"]} />
+            </button>
+          </Badge>
+          <Dropdown menu={menuProps} trigger={["click"]}>
+            <Avatar
+              className={styles["ms--header-avatar"]}
+              icon={<UserOutlined />}
+            />
+          </Dropdown>
+        </Space>
+      </div>
+    </>
   );
 };
 

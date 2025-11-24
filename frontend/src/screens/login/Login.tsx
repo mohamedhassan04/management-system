@@ -4,8 +4,10 @@ import styles from "../../styles/login.module.scss";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import logo from "../../assets/images/icons/logo.svg";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
@@ -16,6 +18,8 @@ const Login: React.FC = () => {
       setLoading(false);
       console.log("Login done!");
     }, 2000);
+
+    navigate("/dashboard");
   };
 
   return (
