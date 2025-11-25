@@ -49,3 +49,20 @@ export class InvoiceQueryDto {
   @IsString()
   status?: string;
 }
+
+export class ClientQueryDto {
+  @ApiPropertyOptional({ default: 10, description: 'Items per page' })
+  @IsOptional()
+  @IsNumberString()
+  limit?: number;
+
+  @ApiPropertyOptional({ default: 1, description: 'Page number' })
+  @IsOptional()
+  @IsNumberString()
+  page?: number;
+
+  @ApiPropertyOptional({ description: 'Search by status' })
+  @IsOptional()
+  @IsString()
+  status?: string;
+}

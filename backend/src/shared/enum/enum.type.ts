@@ -3,6 +3,11 @@ export enum UserRole {
   USER = 'USER',
 }
 
+export enum ClientStatus {
+  ACTIVE = 'Active',
+  INACTIVE = 'Désactive',
+}
+
 export enum CartegoryProduct {
   ELECTRONICS = 'Eléctronique',
   FOOD = 'Alimentaire',
