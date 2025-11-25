@@ -12,12 +12,30 @@ import { IoMdSearch } from "react-icons/io";
 import { RiDeleteBin6Fill, RiEditFill } from "react-icons/ri";
 import { TbLock } from "react-icons/tb";
 import { FcFullTrash } from "react-icons/fc";
+import EditClient from "./EditClient";
 
 const Clients: React.FC = () => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [selectedClient, setSelectedClient] = useState<null | any>(null);
+
+  const handleUpdateClient = async (id: string, client: any) => {};
 
   const handleAddUser = () => {};
+
+  const handleCancelEditModal = () => {
+    setSelectedClient(null);
+    form.resetFields();
+    setIsEditModalOpen(false);
+  };
+
+  const handleShowEditModal = (client: any) => {
+    setSelectedClient(client);
+    form.setFieldsValue(client);
+    setIsEditModalOpen(true);
+  };
+
   const columns = [
     {
       title: "Client",
@@ -44,14 +62,31 @@ const Clients: React.FC = () => {
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
-      render: () => (
+      render: (_: any, record: any) => (
         <Space size="small">
-          <button className={styles["ms--client-actions"]}>
+          <button
+            className={styles["ms--client-actions"]}
+            onClick={() => handleShowEditModal(record)}
+          >
             <RiEditFill size={18} color="#656c8c" />
           </button>
           <Popconfirm
             okText="Oui"
             cancelText="Non"
+            okButtonProps={{
+              style: {
+                backgroundColor: "#3b3391",
+                borderColor: "#3b3391",
+                color: "#fff",
+              },
+            }}
+            cancelButtonProps={{
+              style: {
+                backgroundColor: "#f0f0f0",
+                borderColor: "#d9d9d9",
+                color: "#000",
+              },
+            }}
             title={
               <span className={styles["ms--popconfirm-title"]}>
                 Supprimer ce client
@@ -197,6 +232,14 @@ const Clients: React.FC = () => {
           setIsModalOpen={() => setIsModalOpen(false)}
           form={form}
           handleAddUser={handleAddUser}
+        />
+
+        <EditClient
+          selectedClient={selectedClient}
+          form={form}
+          handleUpdateClient={handleUpdateClient}
+          isModalEditOpen={isEditModalOpen}
+          setIsModalEditOpen={handleCancelEditModal}
         />
       </div>
     </>
