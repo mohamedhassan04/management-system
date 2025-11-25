@@ -4,8 +4,14 @@ import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import styles from "../styles/dashboard-layout.module.scss";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
+import { useLogoutMutation } from "../apis/actions/authApi";
 
 const HeaderComponent: React.FC = () => {
+  const [logout] = useLogoutMutation();
+  const handleLogout = async () => {
+    await logout();
+  };
+
   const menuProps: MenuProps = {
     items: [
       {
@@ -13,9 +19,11 @@ const HeaderComponent: React.FC = () => {
         key: "logout",
         icon: <LogoutOutlined />,
         danger: true,
+        onClick: handleLogout,
       },
     ],
   };
+
   return (
     <>
       <div className={styles["ms--header-container"]}>

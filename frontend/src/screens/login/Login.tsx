@@ -1,29 +1,39 @@
-import React, { useState } from "react";
-import { Form, Row, Col, Spin } from "antd";
+import React from "react";
+import { Form, Row, Col, Spin, notification } from "antd";
 import styles from "../../styles/login.module.scss";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import logo from "../../assets/images/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../../apis/actions/authApi";
 
 const Login: React.FC = () => {
+  const [form] = Form.useForm();
+  const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [login, { isLoading }] = useLoginMutation();
 
-  const handleLogin = () => {
-    setLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      console.log("Login done!");
-    }, 2000);
-
-    navigate("/dashboard");
+  const handleLogin = async () => {
+    try {
+      const values = await form.validateFields();
+      await login(values).unwrap(); // unwrap() returns a promise
+      api.success({
+        message: "Connexion réussie",
+        description: "Bienvenue ! Vous êtes connecté.",
+        placement: "bottomRight",
+      });
+      navigate("/dashboard");
+    } catch (error: any) {
+      api.error({
+        message: "Erreur de connexion",
+        description: error?.data?.message || "Email ou mot de passe incorrect",
+      });
+    }
   };
 
   return (
     <div className={styles["ms--container"]}>
+      {contextHolder}
       <Row justify="center" align="middle" className={styles["ms--row"]}>
         <Col xxl={6} xl={8} lg={16} md={16} sm={16} xs={22}>
           <div className={styles["ms--card"]}>
@@ -37,16 +47,24 @@ const Login: React.FC = () => {
               Bienvenue ! Veuillez saisir vos informations.
             </p>
 
-            <Form layout="vertical">
+            <Form layout="vertical" form={form} onFinish={handleLogin}>
               <Form.Item
                 label={
                   <div className={styles["ms--label-container"]}>
                     <span>Adresse Email</span>
                   </div>
                 }
+                rules={[
+                  {
+                    type: "email",
+                    required: true,
+                    message: "Veuillez saisir votre adresse email",
+                  },
+                ]}
                 name="email"
               >
                 <Input
+                  type="email"
                   placeholder="Entrer votre email"
                   className={styles["ms--input"]}
                 />
@@ -58,6 +76,12 @@ const Login: React.FC = () => {
                     <span>Mot de passe</span>
                   </div>
                 }
+                rules={[
+                  {
+                    required: true,
+                    message: "Veuillez saisir votre mot de passe",
+                  },
+                ]}
                 name="password"
               >
                 <Input
@@ -68,11 +92,11 @@ const Login: React.FC = () => {
               </Form.Item>
 
               <Button
-                onClick={handleLogin}
-                disabled={loading}
+                type="submit"
+                disabled={isLoading}
                 className={styles["ms--login-btn"]}
               >
-                <span>{loading ? <Spin /> : "Se connecter"}</span>
+                <span>{isLoading ? <Spin /> : "Se connecter"}</span>
               </Button>
             </Form>
           </div>
