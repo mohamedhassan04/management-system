@@ -1,4 +1,4 @@
-import { Col, Form, Pagination, Popconfirm, Row, Space } from "antd";
+import { Col, Form, Pagination, Popconfirm, Row, Space, Spin } from "antd";
 import React, { useState } from "react";
 import Button from "../../components/Button";
 import { HiUserAdd } from "react-icons/hi";
@@ -8,28 +8,89 @@ import StatusTag from "../../components/StatusTag";
 import Input from "../../components/Input";
 import Select from "../../components/Select";
 import AddClient from "./AddClient";
-import { IoMdSearch } from "react-icons/io";
+import { IoIosLock, IoIosUnlock, IoMdSearch } from "react-icons/io";
 import { RiDeleteBin6Fill, RiEditFill } from "react-icons/ri";
-import { TbLock } from "react-icons/tb";
 import { FcFullTrash } from "react-icons/fc";
 import EditClient from "./EditClient";
+import {
+  useCreateClientMutation,
+  useFindAllClientsQuery,
+  useRemoveClientMutation,
+  useUpdateClientMutation,
+  useUpdateStatusClientMutation,
+} from "../../apis/actions/clientApi";
 
 const Clients: React.FC = () => {
   const [form] = Form.useForm();
+
+  const [page, setPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [selectedClient, setSelectedClient] = useState<null | any>(null);
+  const [statusSelected, setStatusSelected] = useState<string | null>(null);
+  const [searchStatus, setSearchStatus] = useState<string>("");
 
-  const handleUpdateClient = async (id: string, client: any) => {};
+  const [createClient, { isLoading: isCreating }] = useCreateClientMutation();
+  const [updateClient, { isLoading: isUpdating }] = useUpdateClientMutation();
+  const [updateStatusClient, { isLoading: isUpdatingStatus }] =
+    useUpdateStatusClientMutation();
+  const [removeClient] = useRemoveClientMutation();
 
-  const handleAddUser = () => {};
+  const { data, isLoading } = useFindAllClientsQuery({
+    page: page,
+    limit: 5,
+    status: searchStatus,
+  });
 
+  // Function to update client data
+  const handleUpdateClient = async (id: string, client: any) => {
+    try {
+      await updateClient({ id, data: client }).unwrap();
+      setIsEditModalOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Function to update client status
+  const handleUpdateStatus = async (id: string, status: string) => {
+    setStatusSelected(id);
+    try {
+      await updateStatusClient({ id, data: { status } }).unwrap();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Function to add a new client
+  const handleAddUser = async () => {
+    try {
+      const values = form.getFieldsValue();
+      await createClient(values).unwrap();
+      setIsModalOpen(false);
+      form.resetFields();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Function to delete a client
+  const handleDeleteClient = async (id: string) => {
+    try {
+      await removeClient({ id }).unwrap();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Function to cancel the edit modal
   const handleCancelEditModal = () => {
     setSelectedClient(null);
     form.resetFields();
     setIsEditModalOpen(false);
   };
 
+  // Function to show the edit modal
   const handleShowEditModal = (client: any) => {
     setSelectedClient(client);
     form.setFieldsValue(client);
@@ -38,9 +99,16 @@ const Clients: React.FC = () => {
 
   const columns = [
     {
-      title: "Client",
+      title: "Nom et prénom",
       dataIndex: "name",
       key: "name",
+      render: (_: any, record: any) => (
+        <Space size="small">
+          <span className={styles["ms--client-name"]}>
+            {record.firstName} {record.lastName}
+          </span>
+        </Space>
+      ),
     },
     {
       title: "Téléphone",
@@ -71,6 +139,7 @@ const Clients: React.FC = () => {
             <RiEditFill size={18} color="#656c8c" />
           </button>
           <Popconfirm
+            onConfirm={() => handleDeleteClient(record.id)}
             okText="Oui"
             cancelText="Non"
             okButtonProps={{
@@ -105,75 +174,26 @@ const Clients: React.FC = () => {
               <RiDeleteBin6Fill size={18} color="#f05858" />
             </button>
           </Popconfirm>
-          <button className={styles["ms--client-actions"]}>
-            {data && data.map((item: any) => item.status === "active") ? (
-              <TbLock size={18} color="green" />
+          <button
+            className={styles["ms--client-actions"]}
+            onClick={() =>
+              handleUpdateStatus(
+                record.id,
+                record.status === "Active" ? "Désactive" : "Active"
+              )
+            }
+          >
+            {isUpdatingStatus && statusSelected === record.id ? (
+              <Spin size="small" />
+            ) : record.status === "Active" ? (
+              <IoIosUnlock size={18} color="#14ba83" />
             ) : (
-              <TbLock size={18} color="#f05858" />
+              <IoIosLock size={18} color="#f05858" />
             )}
           </button>
         </Space>
       ),
     },
-  ];
-
-  const data = [
-    {
-      key: "1",
-      name: "Ahmed Ben Salem",
-      phone: "+216 98 123 456",
-      email: "ahmed.bensalem@example.com",
-      status: "active",
-    },
-    {
-      key: "2",
-      name: "Salma Trabelsi",
-      phone: "+216 96 234 789",
-      email: "salma.trabelsi@example.com",
-      status: "inactive",
-    },
-    {
-      key: "3",
-      name: "Mohamed Jaziri",
-      phone: "+216 97 345 678",
-      email: "mohamed.jaziri@example.com",
-      status: "active",
-    },
-    {
-      key: "4",
-      name: "Lina Mhiri",
-      phone: "+216 95 456 123",
-      email: "lina.mhiri@example.com",
-      status: "active",
-    },
-    {
-      key: "5",
-      name: "Walid Bouazizi",
-      phone: "+216 98 567 234",
-      email: "walid.bouazizi@example.com",
-      status: "inactive",
-    },
-    // {
-    //   key: "6",
-    //   name: "Ines Kallel",
-    //   phone: "+216 97 678 345",
-    //   email: "ines.kallel@example.com",
-    //   status: "active",
-    // },
-    // {
-    //   key: "7",
-    //   name: "Sofiene Gharbi",
-    //   phone: "+216 96 789 456",
-    //   email: "sofiene.gharbi@example.com",
-    //   status: "inactive",
-    // },
-    // {
-    //   key: "8",
-    //   name: "Rania Saidi",
-    //   phone: "+216 95 890 567",
-    //   email: "rania.saidi@example.com",
-    //   status: "active",
-    // },
   ];
 
   return (
@@ -194,34 +214,41 @@ const Clients: React.FC = () => {
       </Row>
       <div className={styles["ms--client-table-container"]}>
         <Row style={{ marginBottom: "1.5rem" }} align="middle" gutter={16}>
-          <Col span={16}>
+          <Col span={20}>
             <Input
-              placeholder="Rechercher un client"
+              placeholder="Rechercher un client par son nom ou son email ou son phone ..."
               className={styles["ms--client-input"]}
               suffix={<IoMdSearch size={20} />}
             />
           </Col>
-          <Col span={4}>
-            <Select
-              placeholder="Ville"
-              options={[]}
-              classname={styles["ms--client-select"]}
-            />
-          </Col>
+
           <Col span={4}>
             <Select
               placeholder="Status"
-              options={[]}
+              options={[
+                { value: "Active", label: "Active" },
+                { value: "Désactive", label: "Désactive" },
+              ]}
+              onChange={(e) => {
+                setSearchStatus(e);
+              }}
               classname={styles["ms--client-select"]}
             />
           </Col>
         </Row>
 
-        <Table data={data} columns={columns} rowKey="id" />
+        <Table
+          data={data && data.items}
+          columns={columns}
+          rowKey="id"
+          loading={isLoading}
+        />
         <Pagination
           align="center"
-          defaultCurrent={1}
-          total={200}
+          current={data?.page}
+          total={data?.total}
+          pageSize={data?.limit}
+          onChange={(p) => setPage(p)}
           showSizeChanger={false}
           className={styles["ms--client-pagination"]}
           responsive
@@ -232,6 +259,7 @@ const Clients: React.FC = () => {
           setIsModalOpen={() => setIsModalOpen(false)}
           form={form}
           handleAddUser={handleAddUser}
+          loading={isCreating}
         />
 
         <EditClient
@@ -240,6 +268,7 @@ const Clients: React.FC = () => {
           handleUpdateClient={handleUpdateClient}
           isModalEditOpen={isEditModalOpen}
           setIsModalEditOpen={handleCancelEditModal}
+          loading={isUpdating}
         />
       </div>
     </>

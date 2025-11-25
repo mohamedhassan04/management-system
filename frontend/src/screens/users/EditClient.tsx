@@ -12,6 +12,7 @@ interface EditClientProps {
   handleUpdateClient: (id: string, client: any) => void;
   form: any;
   selectedClient: any;
+  loading?: boolean;
 }
 
 const EditClient: React.FC<EditClientProps> = ({
@@ -20,6 +21,7 @@ const EditClient: React.FC<EditClientProps> = ({
   form,
   handleUpdateClient,
   selectedClient,
+  loading,
 }) => {
   return (
     <Modal
@@ -106,6 +108,7 @@ const EditClient: React.FC<EditClientProps> = ({
         <Row gutter={16} justify="end">
           <Col xxl={9} xl={9} lg={8} md={12} sm={24} xs={24}>
             <Button
+              loading={loading}
               icon={<RiSave2Fill />}
               className={styles["ms--client-btn"]}
               type="submit"

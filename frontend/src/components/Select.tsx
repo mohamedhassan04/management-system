@@ -7,6 +7,7 @@ import { clsx } from "clsx";
 interface SelectProps {
   placeholder: string;
   options: { value: string; label: string }[];
+  onChange?: (value: string) => void;
   classname?: string;
 }
 
@@ -14,11 +15,13 @@ const Select: React.FC<SelectProps> = ({
   placeholder,
   options = [],
   classname,
+  onChange,
   ...rest
 }) => {
   return (
     <div className={styles["ms--select-wrapper"]}>
       <AntSelect
+        onChange={onChange}
         showSearch
         allowClear
         placeholder={placeholder}

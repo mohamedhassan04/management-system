@@ -11,6 +11,7 @@ interface AddClientProps {
   setIsModalOpen: () => void;
   handleAddUser: (values: any) => void;
   form: any;
+  loading?: boolean;
 }
 
 const AddClient: React.FC<AddClientProps> = ({
@@ -18,6 +19,7 @@ const AddClient: React.FC<AddClientProps> = ({
   setIsModalOpen,
   form,
   handleAddUser,
+  loading,
 }) => {
   return (
     <Modal
@@ -34,7 +36,11 @@ const AddClient: React.FC<AddClientProps> = ({
       modalStyle={{ top: -200 }}
       centered={true}
     >
-      <Form form={form} layout="vertical">
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={(values) => handleAddUser(values)}
+      >
         <Row gutter={16}>
           <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
             <Form.Item
@@ -136,7 +142,7 @@ const AddClient: React.FC<AddClientProps> = ({
               icon={<RiSave2Fill />}
               className={styles["ms--client-btn"]}
               type="submit"
-              onClick={() => handleAddUser}
+              loading={loading}
             >
               Ajouter le client
             </Button>

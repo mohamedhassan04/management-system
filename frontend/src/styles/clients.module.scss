@@ -89,6 +89,10 @@
   font-variation-settings: "wght" variables.$font-weight-normal !important;
 }
 
+.ms--client-name {
+  text-transform: capitalize;
+}
+
 // ---- pagination----
 
 .ms--client-pagination {

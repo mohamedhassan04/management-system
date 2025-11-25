@@ -32,11 +32,11 @@
   background: variables.$color-green-primary;
 }
 
-.inactive {
+.désactive {
   background: variables.$color-red-light;
   color: variables.$color-red-primary;
 }
-.inactive .dot {
+.désactive .dot {
   background: variables.$color-red-primary;
 }
 
