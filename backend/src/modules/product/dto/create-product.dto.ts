@@ -3,6 +3,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   Min,
   MinLength,
@@ -25,8 +26,8 @@ export class CreateProductDto {
   })
   @IsString()
   @MinLength(4, { message: 'description must have atleast 4 characters.' })
-  @IsNotEmpty()
-  description: string;
+  @IsOptional()
+  description?: string;
 
   @ApiProperty({
     type: 'string',

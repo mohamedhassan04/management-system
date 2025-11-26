@@ -41,28 +41,28 @@
 }
 
 /* Products */
-.in-stock {
-  background: #e8f7ff;
-  color: #0b76c5;
+.en_stock {
+  background: variables.$color-green-light;
+  color: variables.$color-green-primary;
 }
-.in-stock .dot {
-  background: #0b76c5;
-}
-
-.low-stock {
-  background: #fff8e6;
-  color: #c99700;
-}
-.low-stock .dot {
-  background: #c99700;
+.en_stock .dot {
+  background: variables.$color-green-primary;
 }
 
-.out-of-stock {
-  background: #fdeaea;
-  color: #d93030;
+.stock_faible {
+  background: variables.$color-orange-light;
+  color: variables.$color-orage-primary;
 }
-.out-of-stock .dot {
-  background: #d93030;
+.stock_faible .dot {
+  background: variables.$color-orage-primary;
+}
+
+.rupture_de_stock {
+  background: variables.$color-red-light;
+  color: variables.$color-red-primary;
+}
+.rupture_de_stock .dot {
+  background: variables.$color-red-primary;
 }
 
 /* Invoices */

@@ -8,7 +8,7 @@ export class Product extends Node {
   @Index()
   productName: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @Column({ type: 'enum', enum: CartegoryProduct })

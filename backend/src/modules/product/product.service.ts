@@ -42,12 +42,16 @@ export class ProductService {
   }
 
   async findAllProducts(query: ProductQueryDto) {
-    const { limit = 10, page = 1, category, productName, sku } = query;
+    const { limit = 10, page = 1, category, productName, sku, status } = query;
 
     const qb = this._productRepo.createQueryBuilder('product');
 
     if (category) {
       qb.where('product.category = :category', { category });
+    }
+
+    if (status) {
+      qb.andWhere('product.status = :status', { status });
     }
 
     if (productName) {

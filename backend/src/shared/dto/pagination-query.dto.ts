@@ -27,6 +27,11 @@ export class ProductQueryDto {
   @IsOptional()
   @IsString()
   sku?: string;
+
+  @ApiPropertyOptional({ description: 'Search by status' })
+  @IsOptional()
+  @IsString()
+  status?: string;
 }
 
 export class InvoiceQueryDto {

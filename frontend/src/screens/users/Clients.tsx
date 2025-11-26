@@ -124,6 +124,7 @@ const Clients: React.FC = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      width: 150,
       render: (status: any) => <StatusTag status={status} />,
     },
     {

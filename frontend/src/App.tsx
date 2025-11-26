@@ -6,6 +6,7 @@ import ProtectedRoute from "./apis/utils/ProtectedRoute";
 
 const Login = lazy(() => import("./screens/login/Login"));
 const Clients = lazy(() => import("./screens/users/Clients"));
+const Products = lazy(() => import("./screens/products/Products"));
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
         >
           <Route path="/dashboard" element={<h1>Dashboard</h1>} />
           <Route path="/users" element={<Clients />} />
-          <Route path="/products" element={<h1>Produits</h1>} />
+          <Route path="/products" element={<Products />} />
           <Route path="/invoices" element={<h1>Factures</h1>} />
           <Route path="/devis" element={<h1>Devis</h1>} />
         </Route>
