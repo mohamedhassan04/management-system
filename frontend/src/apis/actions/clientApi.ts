@@ -35,13 +35,21 @@ export const clientApi = baseApi.injectEndpoints({
     }),
     findAllClients: builder.query<
       any,
-      { page?: number; limit?: number; status?: string | null }
+      {
+        page?: number;
+        limit?: number;
+        status?: string | null;
+        search?: string | null;
+      }
     >({
-      query: ({ page = 1, limit = 10, status = "" }) => {
+      query: ({ page = 1, limit = 10, status = "", search = "" }) => {
         let url = `/clients/all-clients-by-user?limit=${limit}&page=${page}`;
 
         if (status) {
           url += `&status=${status}`;
+        }
+        if (search) {
+          url += `&search=${search}`;
         }
 
         return url;

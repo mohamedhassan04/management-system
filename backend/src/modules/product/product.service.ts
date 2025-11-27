@@ -42,26 +42,35 @@ export class ProductService {
   }
 
   async findAllProducts(query: ProductQueryDto) {
-    const { limit = 10, page = 1, category, productName, sku, status } = query;
+    const { limit = 10, page = 1, category, search, status } = query;
 
-    const qb = this._productRepo.createQueryBuilder('product');
+    const qb = this._productRepo
+      .createQueryBuilder('product')
+      .leftJoin('product.category', 'category')
+      .leftJoin('product.supllier', 'supllier')
+      .select([
+        'product',
+        'category.id',
+        'category.name',
+        'supllier.id',
+        'supllier.supplierName',
+      ]);
 
     if (category) {
-      qb.where('product.category = :category', { category });
+      qb.where('category.name = :name', { name: category });
     }
 
     if (status) {
       qb.andWhere('product.status = :status', { status });
     }
 
-    if (productName) {
-      qb.andWhere('product.productName LIKE :productName', {
-        productName: `%${productName}%`,
-      });
-    }
-
-    if (sku) {
-      qb.andWhere('product.sku LIKE :sku', { sku: `%${sku}%` });
+    if (search) {
+      qb.andWhere(
+        `product.productName ILIKE :search 
+        OR product.sku ILIKE :search
+       `,
+        { search: `%${search}%` },
+      );
     }
 
     qb.take(Number(limit));

@@ -8,7 +8,8 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
-import { CartegoryProduct } from 'src/shared/enum/enum.type';
+import { Category } from 'src/modules/categories/entities/category.entity';
+import { Supplier } from 'src/modules/supllier/entities/supllier.entity';
 
 export class CreateProductDto {
   @ApiProperty({
@@ -31,11 +32,10 @@ export class CreateProductDto {
 
   @ApiProperty({
     type: 'string',
-    example: 'Eléctronique',
+    example: '6f68a50d-a9c0-4a6e-9a81-7d542e68b527',
   })
-  @IsEnum(CartegoryProduct)
   @IsNotEmpty()
-  category: CartegoryProduct;
+  category: Category;
 
   @ApiProperty({
     type: 'number',
@@ -64,9 +64,8 @@ export class CreateProductDto {
 
   @ApiProperty({
     type: 'string',
-    example: 'STMT',
+    example: '6f68a50d-a9c0-4a6e-9a81-7d542e68b527',
   })
-  @IsString()
   @IsNotEmpty()
-  supllier: string;
+  supllier: Supplier;
 }

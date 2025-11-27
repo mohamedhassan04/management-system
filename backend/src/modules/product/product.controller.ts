@@ -70,8 +70,7 @@ export class ProductController {
   @ApiQuery({ name: 'limit', required: false })
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'category', required: false })
-  @ApiQuery({ name: 'productName', required: false })
-  @ApiQuery({ name: 'sku', required: false })
+  @ApiQuery({ name: 'search', required: false })
   async findAllProducts(@Query() query: ProductQueryDto) {
     return await this.productService.findAllProducts(query);
   }

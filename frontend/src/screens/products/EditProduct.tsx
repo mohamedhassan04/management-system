@@ -5,6 +5,7 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { RiSave2Fill } from "react-icons/ri";
 import Modal from "../../components/Modal";
+import Select from "../../components/Select";
 
 interface EditProductProps {
   isModalEditOpen: boolean;
@@ -13,6 +14,8 @@ interface EditProductProps {
   form: any;
   selectedProduct: any;
   loading?: boolean;
+  categories?: any;
+  suppliers?: any;
 }
 
 const EditProduct: React.FC<EditProductProps> = ({
@@ -22,6 +25,8 @@ const EditProduct: React.FC<EditProductProps> = ({
   handleUpdateProduct,
   selectedProduct,
   loading,
+  categories,
+  suppliers,
 }) => {
   return (
     <Modal
@@ -75,7 +80,17 @@ const EditProduct: React.FC<EditProductProps> = ({
               }
               name="category"
             >
-              <Input placeholder="Categorie" />
+              <Select
+                options={
+                  categories &&
+                  categories?.map((item: any) => ({
+                    value: item.id,
+                    label: item.name,
+                  }))
+                }
+                placeholder="Categorie"
+                classname={styles["ms--select-add-product"]}
+              />
             </Form.Item>
           </Col>
 
@@ -108,7 +123,17 @@ const EditProduct: React.FC<EditProductProps> = ({
               }
               name="supllier"
             >
-              <Input placeholder="Fournisseur" />
+              <Select
+                options={
+                  suppliers &&
+                  suppliers.map((item: any) => ({
+                    value: item.id,
+                    label: item.supplierName,
+                  }))
+                }
+                placeholder="Fournisseur"
+                classname={styles["ms--select-add-product"]}
+              />
             </Form.Item>
           </Col>
         </Row>

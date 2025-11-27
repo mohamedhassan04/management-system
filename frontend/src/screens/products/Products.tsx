@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import styles from "../../styles/clients.module.scss";
 import {
   useCreateProductMutation,
+  useFindAllCategoriesQuery,
   useFindAllProductsQuery,
+  useFindAllSuplliersQuery,
   useRemoveProductMutation,
   useUpdateProductMutation,
 } from "../../apis/actions/productApi";
@@ -28,6 +30,7 @@ const Products: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<null | any>(null);
   const [searchCategory, setSearchCategory] = useState<string>("");
   const [searchStockLevel, setSearchStockLevel] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string | null>(null);
 
   const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
@@ -38,7 +41,10 @@ const Products: React.FC = () => {
     limit: 5,
     category: searchCategory,
     status: searchStockLevel,
+    search: searchTerm,
   });
+  const { data: categories } = useFindAllCategoriesQuery();
+  const { data: suppliers } = useFindAllSuplliersQuery();
 
   // Function to update product data
   const handleUpdateProduct = async (id: string, product: any) => {
@@ -91,7 +97,11 @@ const Products: React.FC = () => {
   // Function to show the edit modal
   const handleShowEditModal = (product: any) => {
     setSelectedProduct(product);
-    form.setFieldsValue(product);
+    form.setFieldsValue({
+      ...product,
+      category: product?.category?.id,
+      supllier: product?.supllier?.id,
+    });
     setIsEditModalOpen(true);
   };
 
@@ -105,6 +115,7 @@ const Products: React.FC = () => {
       title: "Categorie",
       dataIndex: "category",
       key: "category",
+      render: (_: any, record: any) => record?.category?.name,
     },
     {
       title: "SKU",
@@ -130,6 +141,7 @@ const Products: React.FC = () => {
       title: "Fournisseur",
       dataIndex: "supllier",
       key: "supllier",
+      render: (_: any, record: any) => record?.supllier?.supplierName,
     },
     {
       title: "Status",
@@ -213,6 +225,7 @@ const Products: React.FC = () => {
               placeholder="Rechercher un produit par son nom ou son SKU ..."
               className={styles["ms--client-input"]}
               suffix={<IoMdSearch size={20} />}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </Col>
           <Col span={4}>
@@ -232,13 +245,13 @@ const Products: React.FC = () => {
           <Col span={4}>
             <Select
               placeholder="Catégories"
-              options={[
-                { value: "Eléctronique", label: "Eléctronique" },
-                { value: "Alimentaire", label: "Alimentaire" },
-                { value: "Tabac", label: "Tabac" },
-                { value: "Electromenager", label: "Electromenager" },
-                { value: "Autre", label: "Autre" },
-              ]}
+              options={
+                categories &&
+                categories?.map((item: any) => ({
+                  value: item.name,
+                  label: item.name,
+                }))
+              }
               onChange={(e) => {
                 setSearchCategory(e);
               }}
@@ -253,16 +266,18 @@ const Products: React.FC = () => {
           rowKey="id"
           loading={isLoading}
         />
-        <Pagination
-          align="center"
-          current={data?.page}
-          total={data?.total}
-          pageSize={data?.limit}
-          onChange={(p) => setPage(p)}
-          showSizeChanger={false}
-          className={styles["ms--client-pagination"]}
-          responsive
-        />
+        {data && (
+          <Pagination
+            align="center"
+            current={data?.page}
+            total={data?.total}
+            pageSize={data?.limit}
+            onChange={(p) => setPage(p)}
+            showSizeChanger={false}
+            className={styles["ms--client-pagination"]}
+            responsive
+          />
+        )}
       </div>
 
       <AddProduct
@@ -271,6 +286,8 @@ const Products: React.FC = () => {
         form={form}
         handleAddProduct={handleAddProduct}
         loading={isCreating}
+        categories={categories}
+        suppliers={suppliers}
       />
 
       <EditProduct
@@ -280,6 +297,8 @@ const Products: React.FC = () => {
         isModalEditOpen={isEditModalOpen}
         setIsModalEditOpen={handleCancelEditModal}
         loading={isUpdating}
+        categories={categories}
+        suppliers={suppliers}
       />
     </>
   );

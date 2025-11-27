@@ -26,6 +26,7 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/invoices" element={<h1>Factures</h1>} />
           <Route path="/devis" element={<h1>Devis</h1>} />
+          <Route path="/suplliers" element={<h1>Mes fournisseurs</h1>} />
         </Route>
       </Routes>
     </Suspense>

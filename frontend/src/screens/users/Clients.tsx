@@ -29,6 +29,7 @@ const Clients: React.FC = () => {
   const [selectedClient, setSelectedClient] = useState<null | any>(null);
   const [statusSelected, setStatusSelected] = useState<string | null>(null);
   const [searchStatus, setSearchStatus] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string | null>(null);
 
   const [createClient, { isLoading: isCreating }] = useCreateClientMutation();
   const [updateClient, { isLoading: isUpdating }] = useUpdateClientMutation();
@@ -40,6 +41,7 @@ const Clients: React.FC = () => {
     page: page,
     limit: 5,
     status: searchStatus,
+    search: searchTerm,
   });
 
   // Function to update client data
@@ -220,6 +222,9 @@ const Clients: React.FC = () => {
               placeholder="Rechercher un client par son nom ou son email ou son phone ..."
               className={styles["ms--client-input"]}
               suffix={<IoMdSearch size={20} />}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+              }}
             />
           </Col>
 

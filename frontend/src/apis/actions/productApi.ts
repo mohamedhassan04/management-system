@@ -40,22 +40,43 @@ export const productApi = baseApi.injectEndpoints({
         limit?: number;
         category?: string | null;
         status?: string | null;
+        search?: string | null;
       }
     >({
-      query: ({ page = 1, limit = 10, category = "", status = "" }) => {
+      query: ({
+        page = 1,
+        limit = 10,
+        category = "",
+        status = "",
+        search = "",
+      }) => {
         let url = `/product/all-products?limit=${limit}&page=${page}`;
 
         if (category) {
           url += `&category=${category}`;
         }
-
         if (status) {
           url += `&status=${status}`;
+        }
+        if (search) {
+          url += `&search=${search}`;
         }
 
         return url;
       },
       providesTags: ["Products"],
+    }),
+    findAllCategories: builder.query<any, void>({
+      query: () => ({
+        url: "/categories/find-all",
+      }),
+      providesTags: ["Categories"],
+    }),
+    findAllSuplliers: builder.query<any, void>({
+      query: () => ({
+        url: "/supllier/find-all",
+      }),
+      providesTags: ["Suppliers"],
     }),
   }),
 });
@@ -65,4 +86,6 @@ export const {
   useUpdateProductMutation,
   useRemoveProductMutation,
   useFindAllProductsQuery,
+  useFindAllCategoriesQuery,
+  useFindAllSuplliersQuery,
 } = productApi;

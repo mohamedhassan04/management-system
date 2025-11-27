@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../styles/table.module.scss";
 import { Empty, Table as AntTable } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import emptyData from "../assets/images/10587104.png";
 
 interface ReusableTableProps {
   columns: ColumnsType<any>;
@@ -15,7 +16,7 @@ interface ReusableTableProps {
 
 const CustomEmpty = () => (
   <Empty
-    image={""}
+    image={emptyData}
     description={
       <span className={styles["ms--no-data-text"]}>Aucun données trouvées</span>
     }

@@ -32,7 +32,7 @@ export class ClientsService {
   }
 
   async findAllClientsByUser(query: ClientQueryDto, user: Users) {
-    const { limit = 10, page = 1, status } = query;
+    const { limit = 10, page = 1, status, search } = query;
     const qb = this._clientRepo
       .createQueryBuilder('client')
       .leftJoin('client.user', 'user')
@@ -40,6 +40,16 @@ export class ClientsService {
 
     if (status) {
       qb.andWhere('client.status = :status', { status });
+    }
+
+    if (search) {
+      qb.andWhere(
+        `(client.firstName ILIKE :search 
+        OR client.lastName ILIKE :search
+        OR client.email ILIKE :search
+        OR client.phone ILIKE :search)`,
+        { search: `%${search}%` },
+      );
     }
 
     qb.take(Number(limit));

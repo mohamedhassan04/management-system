@@ -4,6 +4,7 @@ import { FaFileInvoiceDollar } from "react-icons/fa";
 import { MdOutlineDashboard } from "react-icons/md";
 import { PiPackageFill } from "react-icons/pi";
 import { IoDocumentTextSharp } from "react-icons/io5";
+import { TbTruckDelivery } from "react-icons/tb";
 
 export const items: MenuProps["items"] = [
   {
@@ -24,6 +25,11 @@ export const items: MenuProps["items"] = [
         label: "Mes produits",
         icon: <PiPackageFill />,
         key: "/products",
+      },
+      {
+        label: "Mes fournisseurs",
+        icon: <TbTruckDelivery />,
+        key: "/suplliers",
       },
     ],
   },

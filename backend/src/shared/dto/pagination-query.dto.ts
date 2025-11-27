@@ -1,6 +1,5 @@
-import { IsOptional, IsString, IsNumberString, IsEnum } from 'class-validator';
+import { IsOptional, IsString, IsNumberString } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { CartegoryProduct } from '../enum/enum.type';
 
 export class ProductQueryDto {
   @ApiPropertyOptional({ default: 10, description: 'Items per page' })
@@ -15,18 +14,12 @@ export class ProductQueryDto {
 
   @ApiPropertyOptional({ description: 'Search by category name' })
   @IsOptional()
-  @IsEnum(CartegoryProduct)
-  category?: CartegoryProduct;
+  category?: string;
 
-  @ApiPropertyOptional({ description: 'Search by product name' })
+  @ApiPropertyOptional({ description: 'Search by term' })
   @IsOptional()
   @IsString()
-  productName?: string;
-
-  @ApiPropertyOptional({ description: 'Search by SKU' })
-  @IsOptional()
-  @IsString()
-  sku?: string;
+  search?: string;
 
   @ApiPropertyOptional({ description: 'Search by status' })
   @IsOptional()
@@ -70,4 +63,9 @@ export class ClientQueryDto {
   @IsOptional()
   @IsString()
   status?: string;
+
+  @ApiPropertyOptional({ description: 'Search' })
+  @IsOptional()
+  @IsString()
+  search?: string;
 }

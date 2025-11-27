@@ -107,3 +107,16 @@
     @include color($text: variables.$color-white !important);
   }
 }
+
+// ---- add product select ----
+.ms--select-add-product {
+  :global(.ant-select-selector) {
+    @include color($bg: variables.$color-white !important);
+    border-radius: variables.$border-radius-16 !important;
+    border: 1px solid variables.$color-gray-border !important;
+  }
+}
+
+.ms--add-icon {
+  cursor: pointer;
+}

@@ -1,6 +1,8 @@
-import { CartegoryProduct, ProductStock } from 'src/shared/enum/enum.type';
+import { Category } from 'src/modules/categories/entities/category.entity';
+import { Supplier } from 'src/modules/supllier/entities/supllier.entity';
+import { ProductStock } from 'src/shared/enum/enum.type';
 import { Node } from 'src/shared/node/common.entity';
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, ManyToOne } from 'typeorm';
 
 @Entity('tb_product')
 export class Product extends Node {
@@ -10,10 +12,6 @@ export class Product extends Node {
 
   @Column({ nullable: true })
   description: string;
-
-  @Column({ type: 'enum', enum: CartegoryProduct })
-  @Index()
-  category: CartegoryProduct;
 
   @Column('decimal', { precision: 10, scale: 2 })
   price: number;
@@ -36,6 +34,11 @@ export class Product extends Node {
   @Column({ type: 'date', nullable: true })
   lastRestock: Date;
 
-  @Column()
-  supllier: string;
+  @ManyToOne(() => Supplier, (supplier) => supplier.products, {
+    nullable: true,
+  })
+  supllier: Supplier;
+
+  @ManyToOne(() => Category, (category) => category.product)
+  category: Category;
 }
