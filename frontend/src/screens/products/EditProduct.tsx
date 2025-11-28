@@ -99,7 +99,7 @@ const EditProduct: React.FC<EditProductProps> = ({
               label={<span className={styles["ms--client-label"]}>SKU</span>}
               name="sku"
             >
-              <Input placeholder="Sku" />
+              <Input min={0} type="number" placeholder="Sku" />
             </Form.Item>
           </Col>
 
@@ -112,7 +112,7 @@ const EditProduct: React.FC<EditProductProps> = ({
               }
               name="price"
             >
-              <Input min={0} placeholder="Prix" />
+              <Input min={0} type="number" placeholder="Prix" />
             </Form.Item>
           </Col>
 

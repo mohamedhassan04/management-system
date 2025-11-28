@@ -10,8 +10,8 @@ export class Supplier extends Node {
   @Column()
   phoneNumber: string;
 
-  @Column()
-  email: string;
+  @Column({ unique: true, nullable: true })
+  email?: string;
 
   @Column()
   address: string;

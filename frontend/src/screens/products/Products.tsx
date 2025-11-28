@@ -1,4 +1,12 @@
-import { Col, Form, Pagination, Popconfirm, Row, Space } from "antd";
+import {
+  Col,
+  Form,
+  notification,
+  Pagination,
+  Popconfirm,
+  Row,
+  Space,
+} from "antd";
 import React, { useState } from "react";
 import styles from "../../styles/clients.module.scss";
 import {
@@ -21,7 +29,11 @@ import Table from "../../components/Table";
 import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
 
-const Products: React.FC = () => {
+interface ProductsProps {
+  api: ReturnType<typeof notification.useNotification>[0];
+}
+
+const Products: React.FC<ProductsProps> = ({ api }) => {
   const [form] = Form.useForm();
 
   const [page, setPage] = useState<number>(1);
@@ -54,9 +66,20 @@ const Products: React.FC = () => {
         price: Number(product.price),
       };
       await updateProduct({ id, data: values }).unwrap();
+      api.success({
+        message: "Produit mis à jour",
+        description: "Le produit a été mis à jour avec succès.",
+        placement: "bottomRight",
+      });
+      setSelectedProduct(null);
       setIsEditModalOpen(false);
     } catch (error) {
-      console.error(error);
+      api.error({
+        message: "Erreur de mise à jour",
+        description:
+          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        placement: "bottomRight",
+      });
     }
   };
 
@@ -64,6 +87,7 @@ const Products: React.FC = () => {
   const handleAddProduct = async () => {
     try {
       const values = form.getFieldsValue();
+      console.log(values);
       const product = {
         ...values,
         description: values.description ?? null,
@@ -71,10 +95,20 @@ const Products: React.FC = () => {
         quantity: Number(values.quantity),
       };
       await createProduct(product).unwrap();
+      api.success({
+        message: "Nouveau produit ajouté",
+        description: "Le produit a été ajouté avec succès.",
+        placement: "bottomRight",
+      });
       setIsModalOpen(false);
       form.resetFields();
     } catch (error) {
-      console.log(error);
+      api.error({
+        message: "Erreur d'ajout",
+        description:
+          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        placement: "bottomRight",
+      });
     }
   };
 
@@ -82,8 +116,18 @@ const Products: React.FC = () => {
   const handleDeleteProduct = async (id: string) => {
     try {
       await removeClient({ id }).unwrap();
+      api.success({
+        message: "Produit supprimé",
+        description: "Le produit a été supprimé avec succès.",
+        placement: "bottomRight",
+      });
     } catch (error) {
-      console.error(error);
+      api.error({
+        message: "Erreur de suppression",
+        description:
+          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        placement: "bottomRight",
+      });
     }
   };
 

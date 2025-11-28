@@ -8,6 +8,7 @@ import Input from "../../components/Input";
 import Select from "../../components/Select";
 import { PiPlusCircleBold } from "react-icons/pi";
 import AddCategory from "./AddCategory";
+import { useNavigate } from "react-router-dom";
 
 interface AddProductProps {
   isModalOpen: boolean;
@@ -28,6 +29,7 @@ const AddProduct: React.FC<AddProductProps> = ({
   categories,
   suppliers,
 }) => {
+  const navigate = useNavigate();
   const [openModalCategory, setOpenModalCategory] = useState<boolean>(false);
 
   return (
@@ -99,15 +101,16 @@ const AddProduct: React.FC<AddProductProps> = ({
                 <Row gutter={8} align="middle">
                   <Col flex="auto">
                     <Select
-                      options={
-                        categories &&
-                        categories?.map((item: any) => ({
-                          value: item.id,
-                          label: item.name,
-                        }))
-                      }
+                      options={categories?.map((item: any) => ({
+                        value: item.id,
+                        label: item.name,
+                      }))}
                       placeholder="Categorie"
                       classname={styles["ms--select-add-product"]}
+                      value={form.getFieldValue("category")}
+                      onChange={(value) => {
+                        form.setFieldsValue({ category: value });
+                      }}
                     />
                   </Col>
                   <Col>
@@ -135,7 +138,7 @@ const AddProduct: React.FC<AddProductProps> = ({
                   },
                 ]}
               >
-                <Input placeholder="Sku" />
+                <Input type="number" min={0} placeholder="Sku" />
               </Form.Item>
             </Col>
 
@@ -152,7 +155,7 @@ const AddProduct: React.FC<AddProductProps> = ({
                   },
                 ]}
               >
-                <Input min={0} placeholder="Quantité" />
+                <Input type="number" min={0} placeholder="Quantité" />
               </Form.Item>
             </Col>
 
@@ -171,7 +174,7 @@ const AddProduct: React.FC<AddProductProps> = ({
                 ]}
                 name="price"
               >
-                <Input min={0} placeholder="Prix" />
+                <Input type="number" min={0} placeholder="Prix" />
               </Form.Item>
             </Col>
 
@@ -202,6 +205,10 @@ const AddProduct: React.FC<AddProductProps> = ({
                       }
                       placeholder="Fournisseur"
                       classname={styles["ms--select-add-product"]}
+                      value={form.getFieldValue("supllier")}
+                      onChange={(value) => {
+                        form.setFieldsValue({ supllier: value });
+                      }}
                     />
                   </Col>
                   <Col>
@@ -210,6 +217,7 @@ const AddProduct: React.FC<AddProductProps> = ({
                         size={18}
                         color="#4e46e5dc"
                         className={styles["ms--add-icon"]}
+                        onClick={() => navigate("/suplliers")}
                       />
                     </Tooltip>
                   </Col>

@@ -120,3 +120,12 @@
 .ms--add-icon {
   cursor: pointer;
 }
+
+.ms--no-email {
+  @include color($text: variables.$color-gray-dark);
+  @include flex(null, null);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-normal !important;
+  font-variation-settings: "wght" variables.$font-weight-normal !important;
+  gap: 0.25rem;
+}

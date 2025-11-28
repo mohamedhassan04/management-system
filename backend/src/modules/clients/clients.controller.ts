@@ -101,7 +101,7 @@ export class ClientsController {
     return await this.clientsService.updateInvoiceStatus(id, body.status);
   }
 
-  //@Method PATCH
+  //@Method PUT
   //@desc update client status
   //@Path: /update-client
   @ApiOperation({ summary: 'Update client' })

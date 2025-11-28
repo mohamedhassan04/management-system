@@ -9,6 +9,7 @@ interface SelectProps {
   options: { value: string; label: string }[];
   onChange?: (value: string) => void;
   classname?: string;
+  value?: any;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -16,6 +17,7 @@ const Select: React.FC<SelectProps> = ({
   options = [],
   classname,
   onChange,
+  value,
   ...rest
 }) => {
   return (
@@ -26,6 +28,7 @@ const Select: React.FC<SelectProps> = ({
         allowClear
         placeholder={placeholder}
         options={options}
+        value={value}
         className={clsx(styles["ms--select"], classname)}
         suffixIcon={
           <span className={styles["ms--select-icon"]}>

@@ -7,9 +7,12 @@ import logo from "../../assets/images/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../apis/actions/authApi";
 
-const Login: React.FC = () => {
+interface LoginProps {
+  api: ReturnType<typeof notification.useNotification>[0];
+}
+
+const Login: React.FC<LoginProps> = ({ api }) => {
   const [form] = Form.useForm();
-  const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
 
@@ -27,13 +30,13 @@ const Login: React.FC = () => {
       api.error({
         message: "Erreur de connexion",
         description: error?.data?.message || "Email ou mot de passe incorrect",
+        placement: "bottomRight",
       });
     }
   };
 
   return (
     <div className={styles["ms--container"]}>
-      {contextHolder}
       <Row justify="center" align="middle" className={styles["ms--row"]}>
         <Col xxl={6} xl={8} lg={16} md={16} sm={16} xs={22}>
           <div className={styles["ms--card"]}>
@@ -46,7 +49,6 @@ const Login: React.FC = () => {
             <p className={styles["ms--subtitle"]}>
               Bienvenue ! Veuillez saisir vos informations.
             </p>
-
             <Form layout="vertical" form={form} onFinish={handleLogin}>
               <Form.Item
                 label={

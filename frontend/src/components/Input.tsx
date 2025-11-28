@@ -5,7 +5,7 @@ import clsx from "clsx";
 import styles from "../styles/input.module.scss";
 
 interface CustomInputProps extends InputProps {
-  type?: "text" | "email" | "password";
+  type?: "text" | "email" | "password" | "number";
   className?: string;
   suffix?: React.ReactNode;
 }

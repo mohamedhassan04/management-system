@@ -1,4 +1,13 @@
-import { Col, Form, Pagination, Popconfirm, Row, Space, Spin } from "antd";
+import {
+  Col,
+  Form,
+  notification,
+  Pagination,
+  Popconfirm,
+  Row,
+  Space,
+  Spin,
+} from "antd";
 import React, { useState } from "react";
 import Button from "../../components/Button";
 import { HiUserAdd } from "react-icons/hi";
@@ -20,7 +29,11 @@ import {
   useUpdateStatusClientMutation,
 } from "../../apis/actions/clientApi";
 
-const Clients: React.FC = () => {
+interface ClientsProps {
+  api: ReturnType<typeof notification.useNotification>[0];
+}
+
+const Clients: React.FC<ClientsProps> = ({ api }) => {
   const [form] = Form.useForm();
 
   const [page, setPage] = useState<number>(1);
@@ -48,9 +61,20 @@ const Clients: React.FC = () => {
   const handleUpdateClient = async (id: string, client: any) => {
     try {
       await updateClient({ id, data: client }).unwrap();
+      api.success({
+        message: "Client mis à jour",
+        description: "Les informations du client ont été mises à jour.",
+        placement: "bottomRight",
+      });
+      setSelectedClient(null);
       setIsEditModalOpen(false);
     } catch (error) {
-      console.error(error);
+      api.error({
+        message: "Erreur de mise à jour",
+        description:
+          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        placement: "bottomRight",
+      });
     }
   };
 
@@ -59,8 +83,18 @@ const Clients: React.FC = () => {
     setStatusSelected(id);
     try {
       await updateStatusClient({ id, data: { status } }).unwrap();
+      api.success({
+        message: "Client mis à jour",
+        description: "La statut du client a été mis à jour.",
+        placement: "bottomRight",
+      });
     } catch (error) {
-      console.error(error);
+      api.error({
+        message: "Erreur de mise à jour",
+        description:
+          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        placement: "bottomRight",
+      });
     }
   };
 
@@ -69,10 +103,20 @@ const Clients: React.FC = () => {
     try {
       const values = form.getFieldsValue();
       await createClient(values).unwrap();
+      api.success({
+        message: "Nouveau client ajouté",
+        description: "Le client a été ajouté avec succès.",
+        placement: "bottomRight",
+      });
       setIsModalOpen(false);
       form.resetFields();
     } catch (error) {
-      console.log(error);
+      api.error({
+        message: "Erreur d'ajout",
+        description:
+          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        placement: "bottomRight",
+      });
     }
   };
 
@@ -80,8 +124,18 @@ const Clients: React.FC = () => {
   const handleDeleteClient = async (id: string) => {
     try {
       await removeClient({ id }).unwrap();
+      api.success({
+        message: "Client supprimé",
+        description: "Le client a été supprimé avec succès.",
+        placement: "bottomRight",
+      });
     } catch (error) {
-      console.error(error);
+      api.error({
+        message: "Erreur de suppression",
+        description:
+          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        placement: "bottomRight",
+      });
     }
   };
 

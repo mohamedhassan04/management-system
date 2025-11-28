@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateIf,
+} from 'class-validator';
 
 export class CreateSupllierDto {
   @ApiProperty({
@@ -15,7 +21,7 @@ export class CreateSupllierDto {
     example: '+216 55 555 555',
     required: false,
   })
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   phoneNumber?: string;
 
@@ -25,8 +31,9 @@ export class CreateSupllierDto {
     required: false,
   })
   @IsOptional()
+  @ValidateIf((o) => o.email !== null && o.email !== '')
   @IsEmail()
-  email?: string;
+  email?: string | null;
 
   @ApiProperty({
     description: 'Supplier physical address',

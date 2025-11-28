@@ -5,6 +5,8 @@ import {
   HttpStatus,
   UseGuards,
   Get,
+  Query,
+  Put,
 } from '@nestjs/common';
 import { SupllierService } from './supllier.service';
 import { CreateSupllierDto } from './dto/create-supllier.dto';
@@ -17,6 +19,8 @@ import {
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from 'src/shared/decorators/roles.decorator';
+import { ClientQueryDto } from 'src/shared/dto/pagination-query.dto';
+import { UpdateSupllierDto } from './dto/update-supllier.dto';
 
 @ApiTags('Supllier')
 @Controller('supllier')
@@ -61,5 +65,48 @@ export class SupllierController {
   @Get('find-all')
   async findAllSupllier() {
     return await this.supllierService.findAllSupllier();
+  }
+
+  //@Method GET
+  //@desc Get  all clients by query
+  //@Path: /all-supllier-by-query
+  @ApiOperation({ summary: 'Find all suplliers by query' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Successful find all suplliers.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Error find all suplliers.',
+  })
+  @ApiCookieAuth('access_token')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('USER')
+  @Get('all-supllier-by-query')
+  async findAllSupllierByQuery(@Query() query: ClientQueryDto) {
+    return await this.supllierService.findAllSupllierByQuery(query);
+  }
+
+  //@Method PUT
+  //@desc update supllier status
+  //@Path: /update-supllier
+  @ApiOperation({ summary: 'Update supllier' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Successful update supllier.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Error update supllier.',
+  })
+  @ApiCookieAuth('access_token')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('USER')
+  @Put('update-supllier')
+  async updateSupllier(
+    @Query('id') id: string,
+    @Body() updateSupllierDto: UpdateSupllierDto,
+  ) {
+    return await this.supllierService.updateSupllier(id, updateSupllierDto);
   }
 }

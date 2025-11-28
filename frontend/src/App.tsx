@@ -3,33 +3,39 @@ import { lazy, Suspense } from "react";
 import LoadingScreen from "./components/LoadingScreen";
 import DashboardLayout from "./layout/DashboardLayout";
 import ProtectedRoute from "./apis/utils/ProtectedRoute";
+import { notification } from "antd";
 
 const Login = lazy(() => import("./screens/login/Login"));
 const Clients = lazy(() => import("./screens/users/Clients"));
 const Products = lazy(() => import("./screens/products/Products"));
+const Suplliers = lazy(() => import("./screens/suplliers/Suplliers"));
 
 function App() {
+  const [api, contextHolder] = notification.useNotification();
   return (
-    <Suspense fallback={<LoadingScreen />}>
-      <Routes>
-        <Route path="/" element={<Login />} />
+    <>
+      {contextHolder}
+      <Suspense fallback={<LoadingScreen />}>
+        <Routes>
+          <Route path="/" element={<Login api={api} />} />
 
-        <Route
-          element={
-            <ProtectedRoute>
-              <DashboardLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="/dashboard" element={<h1>Dashboard</h1>} />
-          <Route path="/users" element={<Clients />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/invoices" element={<h1>Factures</h1>} />
-          <Route path="/devis" element={<h1>Devis</h1>} />
-          <Route path="/suplliers" element={<h1>Mes fournisseurs</h1>} />
-        </Route>
-      </Routes>
-    </Suspense>
+          <Route
+            element={
+              <ProtectedRoute>
+                <DashboardLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/dashboard" element={<h1>Dashboard</h1>} />
+            <Route path="/users" element={<Clients api={api} />} />
+            <Route path="/products" element={<Products api={api} />} />
+            <Route path="/invoices" element={<h1>Factures</h1>} />
+            <Route path="/devis" element={<h1>Devis</h1>} />
+            <Route path="/suplliers" element={<Suplliers api={api} />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    </>
   );
 }
 

@@ -18,14 +18,6 @@ export const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Products"], // force the refresh of the query
     }),
-    // updateStatusClient: builder.mutation<any, { id: string; data: any }>({
-    //   query: ({ id, data }) => ({
-    //     url: `/clients/update-status?id=${id}`,
-    //     method: "PATCH",
-    //     body: data,
-    //   }),
-    //   invalidatesTags: ["Clients"], // force the refresh of the query
-    // }),
     removeProduct: builder.mutation<any, { id: string }>({
       query: ({ id }) => ({
         url: `/product/delete-product?id=${id}`,
@@ -78,6 +70,15 @@ export const productApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Suppliers"],
     }),
+
+    createCategorie: builder.mutation<any, any>({
+      query: (data) => ({
+        url: `/categories/create`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Categories"], // force the refresh of the query
+    }),
   }),
 });
 
@@ -88,4 +89,5 @@ export const {
   useFindAllProductsQuery,
   useFindAllCategoriesQuery,
   useFindAllSuplliersQuery,
+  useCreateCategorieMutation,
 } = productApi;
