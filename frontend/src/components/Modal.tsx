@@ -30,7 +30,7 @@ const Modal: React.FC<ModalComponentProps> = ({
   return (
     <>
       <ModalAntd
-        wrapClassName="ms--modal-container"
+        wrapClassName={styles["ms--modal-container"]}
         style={{ top: 20, minHeight: "30vh", height: "30vh", ...modalStyle }}
         width={width}
         open={open}

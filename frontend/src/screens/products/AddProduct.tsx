@@ -138,7 +138,7 @@ const AddProduct: React.FC<AddProductProps> = ({
                   },
                 ]}
               >
-                <Input type="number" min={0} placeholder="Sku" />
+                <Input placeholder="Sku" />
               </Form.Item>
             </Col>
 

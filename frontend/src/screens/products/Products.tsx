@@ -6,6 +6,7 @@ import {
   Popconfirm,
   Row,
   Space,
+  type TableColumnsType,
 } from "antd";
 import React, { useState } from "react";
 import styles from "../../styles/clients.module.scss";
@@ -18,6 +19,7 @@ import {
   useUpdateProductMutation,
 } from "../../apis/actions/productApi";
 import { RiDeleteBin6Fill, RiEditFill } from "react-icons/ri";
+import { FaCircleInfo } from "react-icons/fa6";
 import { FcFullTrash } from "react-icons/fc";
 import StatusTag from "../../components/StatusTag";
 import Button from "../../components/Button";
@@ -28,6 +30,7 @@ import Select from "../../components/Select";
 import Table from "../../components/Table";
 import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
+import ProductDetails from "./ProductDetails";
 
 interface ProductsProps {
   api: ReturnType<typeof notification.useNotification>[0];
@@ -39,6 +42,7 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
   const [page, setPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [isProductDetails, setIsProductDetails] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<null | any>(null);
   const [searchCategory, setSearchCategory] = useState<string>("");
   const [searchStockLevel, setSearchStockLevel] = useState<string>("");
@@ -149,7 +153,25 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
     setIsEditModalOpen(true);
   };
 
-  const columns = [
+  // Function to show the details modal
+  const handleShowProductDetails = (product: any) => {
+    setSelectedProduct(product);
+    setIsProductDetails(true);
+  };
+
+  // Function to cancel the details modal
+  const handleCancelProductDetails = () => {
+    setSelectedProduct(null);
+    setIsProductDetails(false);
+  };
+
+  const columns: TableColumnsType = [
+    {
+      title: "Référence",
+      dataIndex: "sku",
+      key: "sku",
+      width: 200,
+    },
     {
       title: "Nom de produit",
       dataIndex: "productName",
@@ -162,14 +184,10 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
       render: (_: any, record: any) => record?.category?.name,
     },
     {
-      title: "SKU",
-      dataIndex: "sku",
-      key: "sku",
-    },
-    {
       title: "Stock disponible",
       dataIndex: "quantity",
       key: "quantity",
+      align: "center",
     },
     {
       title: "Prix unitaire",
@@ -177,26 +195,17 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
       key: "price",
     },
     {
-      title: "Dernier restock",
-      dataIndex: "lastRestock",
-      key: "lastRestock",
-    },
-    {
-      title: "Fournisseur",
-      dataIndex: "supllier",
-      key: "supllier",
-      render: (_: any, record: any) => record?.supllier?.supplierName,
-    },
-    {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      fixed: "right",
       render: (status: any) => <StatusTag status={status} />,
     },
     {
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
+      fixed: "right",
       render: (_: any, record: any) => (
         <Space size="small">
           <button
@@ -241,6 +250,13 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
               <RiDeleteBin6Fill size={18} color="#f05858" />
             </button>
           </Popconfirm>
+
+          <button
+            className={styles["ms--client-actions"]}
+            onClick={() => handleShowProductDetails(record)}
+          >
+            <FaCircleInfo size={18} color="#656c8c" />
+          </button>
         </Space>
       ),
     },
@@ -309,6 +325,7 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
           columns={columns}
           rowKey="id"
           loading={isLoading}
+          scroll={{ x: 1000 }}
         />
         {data && (
           <Pagination
@@ -343,6 +360,12 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
         loading={isUpdating}
         categories={categories}
         suppliers={suppliers}
+      />
+
+      <ProductDetails
+        selectedProduct={selectedProduct}
+        isModalProductDetailsOpen={isProductDetails}
+        setIsModalProductDetailsOpen={handleCancelProductDetails}
       />
     </>
   );

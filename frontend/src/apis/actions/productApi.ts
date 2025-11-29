@@ -10,6 +10,14 @@ export const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Products"], // force the refresh of the query
     }),
+    addStockProduct: builder.mutation<any, any>({
+      query: (product) => ({
+        url: "/product/add-stock",
+        method: "POST",
+        body: product,
+      }),
+      invalidatesTags: ["Products"], // force the refresh of the query
+    }),
     updateProduct: builder.mutation<any, { id: string; data: any }>({
       query: ({ id, data }) => ({
         url: `/product/update-product?id=${id}`,
@@ -86,8 +94,9 @@ export const {
   useCreateProductMutation,
   useUpdateProductMutation,
   useRemoveProductMutation,
+  useCreateCategorieMutation,
+  useAddStockProductMutation,
   useFindAllProductsQuery,
   useFindAllCategoriesQuery,
   useFindAllSuplliersQuery,
-  useCreateCategorieMutation,
 } = productApi;

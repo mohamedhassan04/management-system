@@ -1,0 +1,23 @@
+@use "./variables";
+@use "./mixins";
+
+.ms--product-titles {
+  @include fluid-font(0.6, 0.9);
+  @include color($text: variables.$color-title-gray);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-medium !important;
+  font-variation-settings: "wght" variables.$font-weight-medium !important;
+}
+
+.ms--product-content {
+  @include fluid-font(0.6, 0.9);
+  @include color($text: variables.$color-black-mate);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-semibold !important;
+  font-variation-settings: "wght" variables.$font-weight-semibold !important;
+  text-transform: capitalize;
+}
+
+.ms--product-stock-status {
+  @include flex(null, null, center, 1rem);
+}
