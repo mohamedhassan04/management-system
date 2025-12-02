@@ -17,7 +17,7 @@ export enum ProductStock {
 export enum InvoicePaymentStatus {
   DRAFT = 'brouillon',
   PAID = 'payé',
-  UNPAID = 'non payé',
-  PARTIALLY_PAID = 'partiellement payé',
+  UNPAID = 'non_payé',
+  PARTIALLY_PAID = 'partiellement_payé',
   CANCELLED = 'annulé',
 }

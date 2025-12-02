@@ -50,6 +50,14 @@ export class CreateInvoiceDto {
   @IsUUID()
   clientId?: string;
 
+  @ApiProperty({ example: '2025-12-31', description: 'Invoice due date' })
+  @IsString()
+  dueDate: string;
+
+  @ApiProperty({ example: '2025-12-31', description: 'Invoice due date' })
+  @IsString()
+  paymentDate: string;
+
   @ApiProperty({
     type: [CreateInvoiceItemDto],
     description: 'List of items inside the invoice',

@@ -117,6 +117,23 @@
   }
 }
 
+.ms--add-product-item-btn {
+  @include flex(center, center);
+  @include color(
+    $bg: variables.$color-bg-gray,
+    $text: variables.$color-primary-purple-dark
+  );
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: 1px dashed variables.$color-primary-purple-dark;
+  border-radius: variables.$border-radius-16 !important;
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-medium !important;
+  font-variation-settings: "wght" variables.$font-weight-medium !important;
+  cursor: pointer;
+}
+
 .ms--add-icon {
   cursor: pointer;
 }

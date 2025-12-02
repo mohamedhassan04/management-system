@@ -146,13 +146,9 @@ export class InvoiceController {
     return await this.invoiceService.sendReminderPaymentEmail(id);
   }
 
-  //@Method GET
-  //@desc Generate and download invoice PDF
-  //@Path: /facture/generate-invoice
-
   //@Method POST
-  //@desc send reminder email payment
-  //@Path: /send-reminder
+  //@desc Generate and download invoice PDF
+  //@Path: /invoice/generate-invoice
   @ApiOperation({ summary: 'Generate and download invoice PDF' })
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -165,7 +161,7 @@ export class InvoiceController {
   @ApiCookieAuth('access_token')
   // @UseGuards(JwtAuthGuard, RolesGuard)
   // @Roles('USER')
-  @Get('generate-invoice')
+  @Post('generate-invoice')
   async generateInvoice(
     @Query('factureId') factureId: string,
     @Res() res: Response,

@@ -2,7 +2,7 @@
 @use "./mixins";
 
 .ms--select {
-  width: auto;
+  width: 100%;
   min-width: 140px;
 
   :global(.ant-select-selection-item),

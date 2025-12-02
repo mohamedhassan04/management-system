@@ -9,6 +9,7 @@ const Login = lazy(() => import("./screens/login/Login"));
 const Clients = lazy(() => import("./screens/users/Clients"));
 const Products = lazy(() => import("./screens/products/Products"));
 const Suplliers = lazy(() => import("./screens/suplliers/Suplliers"));
+const Invoice = lazy(() => import("./screens/invoice/Invoice"));
 
 function App() {
   const [api, contextHolder] = notification.useNotification();
@@ -29,7 +30,7 @@ function App() {
             <Route path="/dashboard" element={<h1>Dashboard</h1>} />
             <Route path="/users" element={<Clients api={api} />} />
             <Route path="/products" element={<Products api={api} />} />
-            <Route path="/invoices" element={<h1>Factures</h1>} />
+            <Route path="/invoices" element={<Invoice api={api} />} />
             <Route path="/devis" element={<h1>Devis</h1>} />
             <Route path="/suplliers" element={<Suplliers api={api} />} />
           </Route>

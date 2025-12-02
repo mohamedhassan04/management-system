@@ -1,0 +1,22 @@
+@use "./variables";
+@use "./mixins";
+
+.ms--invoice-titles {
+  @include fluid-font(0.6, 0.8);
+  @include color($text: variables.$color-title-gray);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-medium !important;
+  font-variation-settings: "wght" variables.$font-weight-medium !important;
+}
+
+.ms--invoice-content {
+  @include fluid-font(0.6, 0.9);
+  @include color($text: variables.$color-black-mate);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-semibold !important;
+  font-variation-settings: "wght" variables.$font-weight-semibold !important;
+}
+
+.ms--remove-product-icon {
+  cursor: pointer;
+}

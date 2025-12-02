@@ -129,16 +129,18 @@ const AddProduct: React.FC<AddProductProps> = ({
 
             <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
               <Form.Item
-                label={<span className={styles["ms--client-label"]}>SKU</span>}
+                label={
+                  <span className={styles["ms--client-label"]}>Référence</span>
+                }
                 name="sku"
                 rules={[
                   {
                     required: true,
-                    message: "Veuillez saisir le sku",
+                    message: "Veuillez saisir le référence",
                   },
                 ]}
               >
-                <Input placeholder="Sku" />
+                <Input placeholder="Référence" />
               </Form.Item>
             </Col>
 

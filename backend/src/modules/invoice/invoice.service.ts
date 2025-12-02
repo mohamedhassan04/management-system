@@ -21,6 +21,7 @@ import { InvoiceQueryDto } from 'src/shared/dto/pagination-query.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmailService } from 'src/shared/send-mail/mail.service';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
+import { Client } from '../clients/entities/client.entity';
 
 writtenNumber.defaults.lang = 'fr';
 
@@ -35,10 +36,10 @@ export class InvoiceService {
 
   async createInvoice(createInvoiceDto: CreateInvoiceDto) {
     return this.dataSource.transaction(async (manager) => {
-      let client: Users | null = null;
+      let client: Client | null = null;
 
       if (createInvoiceDto.clientId) {
-        client = await manager.findOne(Users, {
+        client = await manager.findOne(Client, {
           where: { id: createInvoiceDto.clientId },
         });
         if (!client) {
@@ -62,7 +63,8 @@ export class InvoiceService {
       const invoice = manager.create(Invoice, {
         client,
         status: InvoicePaymentStatus.DRAFT,
-        dueDate: dayjs().toDate(),
+        dueDate: createInvoiceDto.dueDate,
+        paymentDate: createInvoiceDto.paymentDate || null,
         notes: createInvoiceDto.notes || null,
         items: [],
       });
@@ -123,7 +125,10 @@ export class InvoiceService {
   async findAllInvoices(query: InvoiceQueryDto) {
     const { limit = 10, page = 1, dueDate, status } = query;
 
-    const qb = this._invoiceRepo.createQueryBuilder('invoice');
+    const qb = this._invoiceRepo
+      .createQueryBuilder('invoice')
+      .leftJoin('invoice.client', 'client')
+      .select(['invoice', 'client.id', 'client.firstName', 'client.lastName']);
 
     if (status) {
       qb.where('invoice.status = :status', { status });
@@ -183,7 +188,7 @@ export class InvoiceService {
 
       // Update client if provided
       if (updateInvoiceDto.clientId) {
-        const client = await manager.findOne(Users, {
+        const client = await manager.findOne(Client, {
           where: { id: updateInvoiceDto.clientId },
         });
         if (!client) throw new NotFoundException('Client introuvable');

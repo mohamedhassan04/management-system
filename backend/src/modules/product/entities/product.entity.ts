@@ -23,6 +23,9 @@ export class Product extends Node {
   @Column({ nullable: true })
   quantity: number;
 
+  @Column({ nullable: true })
+  taxRate: string;
+
   @Column({
     type: 'enum',
     enum: ProductStock,

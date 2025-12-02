@@ -66,18 +66,35 @@
 }
 
 /* Invoices */
-.paid {
-  background: #e7f6ff;
-  color: #0077ff;
+.brouillon {
+  background: variables.$color-blue-light;
+  color: variables.$color-blue-primary;
 }
-.paid .dot {
-  background: #0077ff;
+.brouillon .dot {
+  background: variables.$color-blue-primary;
 }
 
-.unpaid {
-  background: #fff0e6;
-  color: #ff7a00;
+.non_payé {
+  background: variables.$color-red-light;
+  color: variables.$color-red-primary;
 }
-.unpaid .dot {
-  background: #ff7a00;
+.non_payé .dot {
+  background: variables.$color-red-primary;
+}
+
+.partiellement_payé {
+  background: variables.$color-orange-light;
+  color: variables.$color-orage-primary;
+}
+.partiellement_payé .dot {
+  background: variables.$color-orage-primary;
+}
+
+.payé {
+  background: variables.$color-green-light;
+  color: variables.$color-green-primary;
+}
+
+.payé .dot {
+  background: variables.$color-green-primary;
 }

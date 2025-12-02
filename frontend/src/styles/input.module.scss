@@ -36,3 +36,64 @@
     @include color($text: variables.$color-gray-dark !important);
   }
 }
+
+// ---- DatePicker specific styles ----
+.ms--date-picker {
+  width: 100% !important;
+  border-radius: variables.$border-radius-16 !important;
+
+  &:hover,
+  &:focus {
+    border-color: variables.$color-gray-border !important;
+    box-shadow: none !important;
+  }
+
+  // Input text
+  :global(.ant-picker-input > input) {
+    @include color($text: variables.$color-black-mate !important);
+    font-family: variables.$font-family-ibm !important;
+    font-weight: variables.$font-weight-normal !important;
+    font-variation-settings: "wght" variables.$font-weight-normal !important;
+  }
+
+  :global(.ant-picker-input > input::placeholder) {
+    color: variables.$color-gray-dark !important;
+  }
+
+  :global(.ant-picker-suffix) {
+    color: variables.$color-gray-dark !important;
+  }
+}
+
+:global(.ant-picker-dropdown .ant-picker-header-view > button) {
+  @include color($text: variables.$color-primary-purple-dark !important);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-semibold !important;
+  font-variation-settings: "wght" variables.$font-weight-semibold !important;
+}
+
+:global(.ant-picker-now a) {
+  @include color($text: variables.$color-primary-purple-dark !important);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-semibold !important;
+  font-variation-settings: "wght" variables.$font-weight-semibold !important;
+}
+
+:global(
+    .ant-picker-dropdown
+      .ant-picker-cell-in-view.ant-picker-cell-selected:not(
+        .ant-picker-cell-disabled
+      )
+      .ant-picker-cell-inner
+  ) {
+  @include color($bg: variables.$color-primary-purple-dark !important);
+  border-color: variables.$color-primary-purple-dark !important;
+  box-shadow: none !important;
+}
+
+:global(.ant-picker-body) {
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-normal !important;
+  font-variation-settings: "wght" variables.$font-weight-normal !important;
+  text-transform: capitalize !important;
+}

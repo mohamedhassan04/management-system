@@ -1,16 +1,16 @@
 import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
 import { InvoiceItem } from './invoice-item.entity';
 import { Node } from 'src/shared/node/common.entity';
-import { Users } from 'src/modules/user/entities/user.entity';
 import { InvoicePaymentStatus } from 'src/shared/enum/enum.type';
+import { Client } from 'src/modules/clients/entities/client.entity';
 
 @Entity('tb_invoice')
 export class Invoice extends Node {
   @OneToMany(() => InvoiceItem, (item) => item.invoice, { cascade: true })
   items: InvoiceItem[];
 
-  @ManyToOne(() => Users, { nullable: true })
-  client: Users;
+  @ManyToOne(() => Client, { nullable: true })
+  client: Client;
 
   @Column({
     type: 'enum',
