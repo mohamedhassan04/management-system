@@ -129,7 +129,7 @@ export class ProductService {
       throw new NotFoundException('Produit introuvable');
     }
 
-    await this._productRepo.remove(product);
+    await this._productRepo.softDelete(product.id);
 
     return {
       status: HttpStatus.OK,

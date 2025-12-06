@@ -82,15 +82,9 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
       <Form
         form={form}
         layout="vertical"
-        initialValues={{
-          items: items.map((item) => ({
-            ...item,
-            qty: item.qty || 1,
-            price: item.price || 0,
-            taxRate: item.taxRate || 0,
-          })),
+        onFinish={(values) => {
+          handleAddInvoice(values);
         }}
-        onFinish={(values) => handleAddInvoice({ ...values, items })}
       >
         <Row gutter={16}>
           <Col span={8}>
@@ -213,7 +207,13 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
               </Col>
 
               <Col span={3}>
-                <Form.Item>
+                <Form.Item
+                  name={["items", i, "taxRate"]}
+                  normalize={(value) => {
+                    const numValue = Number(value);
+                    return isNaN(numValue) ? 1 : Math.max(1, numValue);
+                  }}
+                >
                   <Input
                     type="number"
                     min={0}

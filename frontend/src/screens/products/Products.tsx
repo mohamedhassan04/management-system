@@ -11,6 +11,7 @@ import {
 import React, { useState } from "react";
 import styles from "../../styles/clients.module.scss";
 import {
+  useAddStockProductMutation,
   useCreateProductMutation,
   useFindAllCategoriesQuery,
   useFindAllProductsQuery,
@@ -19,6 +20,7 @@ import {
   useUpdateProductMutation,
 } from "../../apis/actions/productApi";
 import { RiDeleteBin6Fill, RiEditFill } from "react-icons/ri";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaCircleInfo } from "react-icons/fa6";
 import { FcFullTrash } from "react-icons/fc";
 import StatusTag from "../../components/StatusTag";
@@ -31,6 +33,9 @@ import Table from "../../components/Table";
 import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
 import ProductDetails from "./ProductDetails";
+import Popover from "../../components/Popover";
+import AddStock from "./AddStock";
+import { BiPlusMedical } from "react-icons/bi";
 
 interface ProductsProps {
   api: ReturnType<typeof notification.useNotification>[0];
@@ -43,6 +48,7 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isProductDetails, setIsProductDetails] = useState<boolean>(false);
+  const [isAddStockOpen, setIsAddStockOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<null | any>(null);
   const [searchCategory, setSearchCategory] = useState<string>("");
   const [searchStockLevel, setSearchStockLevel] = useState<string>("");
@@ -50,7 +56,9 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
 
   const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
-  const [removeClient] = useRemoveProductMutation();
+  const [addStockProduct, { isLoading: isAddingStock }] =
+    useAddStockProductMutation();
+  const [removeProduct] = useRemoveProductMutation();
 
   const { data, isLoading } = useFindAllProductsQuery({
     page: page,
@@ -91,7 +99,6 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
   const handleAddProduct = async () => {
     try {
       const values = form.getFieldsValue();
-      console.log(values);
       const product = {
         ...values,
         description: values.description ?? null,
@@ -116,10 +123,33 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
     }
   };
 
+  const handleAddStock = async (id: string, product: any) => {
+    try {
+      const values = {
+        quantity: Number(product.quantity),
+      };
+      await addStockProduct({ id, product: values }).unwrap();
+      api.success({
+        message: "Stock mis à jour",
+        description: "Le stock a été mis à jour avec succès.",
+        placement: "bottomRight",
+      });
+      setSelectedProduct(null);
+      setIsAddStockOpen(false);
+    } catch (error) {
+      api.error({
+        message: "Erreur de mise à jour",
+        description:
+          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        placement: "bottomRight",
+      });
+    }
+  };
+
   // Function to delete a product
   const handleDeleteProduct = async (id: string) => {
     try {
-      await removeClient({ id }).unwrap();
+      await removeProduct({ id }).unwrap();
       api.success({
         message: "Produit supprimé",
         description: "Le produit a été supprimé avec succès.",
@@ -163,6 +193,16 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
   const handleCancelProductDetails = () => {
     setSelectedProduct(null);
     setIsProductDetails(false);
+  };
+
+  const handleShowAddStockModal = (product: any) => {
+    setSelectedProduct(product);
+    setIsAddStockOpen(true);
+  };
+
+  const handleCancelAddStockModal = () => {
+    setSelectedProduct(null);
+    setIsAddStockOpen(false);
   };
 
   const columns: TableColumnsType = [
@@ -250,13 +290,48 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
               <RiDeleteBin6Fill size={18} color="#f05858" />
             </button>
           </Popconfirm>
-
-          <button
-            className={styles["ms--client-actions"]}
-            onClick={() => handleShowProductDetails(record)}
+          <Popover
+            content={
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                    cursor: "pointer",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  <button
+                    className={styles["ms--client-actions"]}
+                    onClick={() => handleShowProductDetails(record)}
+                  >
+                    <FaCircleInfo size={18} color="#656c8c" />
+                  </button>
+                  <span>Détail du produit</span>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                    cursor: "pointer",
+                    marginBottom: "0.5rem",
+                  }}
+                  onClick={() => handleShowAddStockModal(record)}
+                >
+                  <button className={styles["ms--client-actions"]}>
+                    <BiPlusMedical size={18} color="#656c8c" />
+                  </button>
+                  <span>Ajouter stock</span>
+                </div>
+              </>
+            }
           >
-            <FaCircleInfo size={18} color="#656c8c" />
-          </button>
+            <button className={styles["ms--client-actions"]}>
+              <BsThreeDotsVertical size={18} color="#656c8c" />
+            </button>
+          </Popover>
         </Space>
       ),
     },
@@ -360,6 +435,15 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
         loading={isUpdating}
         categories={categories}
         suppliers={suppliers}
+      />
+
+      <AddStock
+        isModalOpen={isAddStockOpen}
+        setIsModalOpen={handleCancelAddStockModal}
+        form={form}
+        handleAddStock={handleAddStock}
+        selectedProduct={selectedProduct}
+        loading={isAddingStock}
       />
 
       <ProductDetails

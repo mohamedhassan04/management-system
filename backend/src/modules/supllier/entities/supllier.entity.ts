@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 import { Node } from 'src/shared/node/common.entity';
 import { Product } from 'src/modules/product/entities/product.entity';
 
@@ -15,6 +15,9 @@ export class Supplier extends Node {
 
   @Column()
   address: string;
+
+  @DeleteDateColumn({ nullable: true, type: 'timestamp' })
+  deletedAt?: Date;
 
   @OneToMany(() => Product, (product) => product.supllier)
   products: Product[];

@@ -18,21 +18,13 @@ export const supllierApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Suppliers"], // force the refresh of the query
     }),
-    // updateStatusClient: builder.mutation<any, { id: string; data: any }>({
-    //   query: ({ id, data }) => ({
-    //     url: `/clients/update-status?id=${id}`,
-    //     method: "PATCH",
-    //     body: data,
-    //   }),
-    //   invalidatesTags: ["Clients"], // force the refresh of the query
-    // }),
-    // removeClient: builder.mutation<any, { id: string }>({
-    //   query: ({ id }) => ({
-    //     url: `/clients/remove-client?id=${id}`,
-    //     method: "DELETE",
-    //   }),
-    //   invalidatesTags: ["Clients"], // force the refresh of the query
-    // }),
+    removeSupllier: builder.mutation<any, { id: string }>({
+      query: ({ id }) => ({
+        url: `/supllier/remove-supllier?id=${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Suppliers"], // force the refresh of the query
+    }),
     findAllSuplliersSearch: builder.query<
       any,
       {
@@ -62,5 +54,6 @@ export const supllierApi = baseApi.injectEndpoints({
 export const {
   useCreateSupllierMutation,
   useUpdateSupllierMutation,
+  useRemoveSupllierMutation,
   useFindAllSuplliersSearchQuery,
 } = supllierApi;

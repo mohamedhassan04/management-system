@@ -11,8 +11,8 @@ export const productApi = baseApi.injectEndpoints({
       invalidatesTags: ["Products"], // force the refresh of the query
     }),
     addStockProduct: builder.mutation<any, any>({
-      query: (product) => ({
-        url: "/product/add-stock",
+      query: ({ id, product }) => ({
+        url: `/product/add-stock?id=${id}`,
         method: "POST",
         body: product,
       }),

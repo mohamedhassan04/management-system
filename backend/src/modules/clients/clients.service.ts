@@ -100,7 +100,7 @@ export class ClientsService {
 
     if (!exist) throw new NotFoundException('Client introuvable');
 
-    await this._clientRepo.remove(exist);
+    await this._clientRepo.softDelete(exist.id);
     return {
       message: 'Client supprimé avec success',
       HttpStatus: HttpStatus.OK,

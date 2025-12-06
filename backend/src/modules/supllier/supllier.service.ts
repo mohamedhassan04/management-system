@@ -67,4 +67,16 @@ export class SupllierService {
       HttpStatus: HttpStatus.OK,
     };
   }
+
+  async removeSupllier(id: string) {
+    const exist = await this._supllierRepo.findOneBy({ id: id });
+
+    if (!exist) throw new NotFoundException('Fournisseur introuvable');
+
+    await this._supllierRepo.softDelete(exist.id);
+    return {
+      message: 'Fournisseur supprimé avec success',
+      HttpStatus: HttpStatus.OK,
+    };
+  }
 }

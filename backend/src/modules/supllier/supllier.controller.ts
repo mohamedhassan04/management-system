@@ -7,6 +7,7 @@ import {
   Get,
   Query,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { SupllierService } from './supllier.service';
 import { CreateSupllierDto } from './dto/create-supllier.dto';
@@ -108,5 +109,25 @@ export class SupllierController {
     @Body() updateSupllierDto: UpdateSupllierDto,
   ) {
     return await this.supllierService.updateSupllier(id, updateSupllierDto);
+  }
+
+  //@Method DELETE
+  //@desc remove supllier
+  //@Path: /remove-supllier
+  @ApiOperation({ summary: 'remove supllier' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Successful remove supllier.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Error remove supllier.',
+  })
+  @ApiCookieAuth('access_token')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('USER')
+  @Delete('remove-supllier')
+  async remove(@Query('id') id: string) {
+    return await this.supllierService.removeSupllier(id);
   }
 }

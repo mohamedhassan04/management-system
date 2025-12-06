@@ -25,6 +25,7 @@ const Select: React.FC<SelectProps> = ({
       <AntSelect
         onChange={onChange}
         showSearch
+        optionFilterProp="label"
         allowClear
         placeholder={placeholder}
         options={options}

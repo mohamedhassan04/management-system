@@ -19,6 +19,7 @@ import Table from "../../components/Table";
 import {
   useCreateSupllierMutation,
   useFindAllSuplliersSearchQuery,
+  useRemoveSupllierMutation,
   useUpdateSupllierMutation,
 } from "../../apis/actions/suplliersApi";
 import AddSupllier from "./AddSupllier";
@@ -43,6 +44,7 @@ const Suplliers: React.FC<SupllierProps> = ({ api }) => {
     useCreateSupllierMutation();
   const [updateSupllier, { isLoading: isUpdating }] =
     useUpdateSupllierMutation();
+  const [removeSupllier] = useRemoveSupllierMutation();
   const { data, isLoading } = useFindAllSuplliersSearchQuery({
     page: page,
     limit: 5,
@@ -93,14 +95,24 @@ const Suplliers: React.FC<SupllierProps> = ({ api }) => {
     }
   };
 
-  // Function to delete a client
-  //   const handleDeleteClient = async (id: string) => {
-  //     try {
-  //       await removeClient({ id }).unwrap();
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+  // Function to delete a supllier
+  const handleDeleteSupllier = async (id: string) => {
+    try {
+      await removeSupllier({ id }).unwrap();
+      api.success({
+        message: "Fournisseur supprimé",
+        description: "Le fournisseur a été supprimé avec succès.",
+        placement: "bottomRight",
+      });
+    } catch (error) {
+      api.error({
+        message: "Erreur de suppression",
+        description:
+          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        placement: "bottomRight",
+      });
+    }
+  };
 
   // Function to cancel the edit modal
   const handleCancelEditModal = () => {
@@ -158,7 +170,7 @@ const Suplliers: React.FC<SupllierProps> = ({ api }) => {
             <RiEditFill size={18} color="#656c8c" />
           </button>
           <Popconfirm
-            // onConfirm={() => handleDeleteClient(record.id)}
+            onConfirm={() => handleDeleteSupllier(record.id)}
             okText="Oui"
             cancelText="Non"
             okButtonProps={{

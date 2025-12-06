@@ -1,7 +1,7 @@
 import { Users } from 'src/modules/user/entities/user.entity';
 import { ClientStatus } from 'src/shared/enum/enum.type';
 import { Node } from 'src/shared/node/common.entity';
-import { Column, Entity, Index, ManyToOne } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, Index, ManyToOne } from 'typeorm';
 
 @Entity('tb_clients')
 export class Client extends Node {
@@ -26,6 +26,9 @@ export class Client extends Node {
 
   @Column({ type: 'varchar', nullable: true })
   notes: string;
+
+  @DeleteDateColumn({ nullable: true, type: 'timestamp' })
+  deletedAt?: Date;
 
   @ManyToOne(() => Users, (client) => client.client, { cascade: true })
   user: Users;
