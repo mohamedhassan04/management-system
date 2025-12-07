@@ -9,7 +9,6 @@ import { Invoice } from './entities/invoice.entity';
 import { DataSource, In, Repository } from 'typeorm';
 import { InvoiceItem } from './entities/invoice-item.entity';
 import { Product } from '../product/entities/product.entity';
-import { Users } from '../user/entities/user.entity';
 import { InvoicePaymentStatus, ProductStock } from 'src/shared/enum/enum.type';
 import dayjs from 'dayjs';
 import * as path from 'path';
@@ -33,6 +32,31 @@ export class InvoiceService {
     private readonly dataSource: DataSource,
     private readonly mailerService: EmailService,
   ) {}
+
+  async generateNumero(): Promise<string> {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // 01-12
+
+    // Chercher le dernier numéro pour ce mois/année
+    const lastInvoice = await this._invoiceRepo
+      .createQueryBuilder('invoice')
+      .where('EXTRACT(YEAR FROM invoice.paymentDate) = :year', { year })
+      .andWhere('EXTRACT(MONTH FROM invoice.paymentDate) = :month', {
+        month: parseInt(month),
+      })
+      .orderBy('invoice.invoiceNo', 'DESC')
+      .getOne();
+    let sequence = 1;
+    if (lastInvoice) {
+      // Prendre le dernier numéro séquentiel
+      const parts = lastInvoice?.invoiceNo?.split('-');
+      sequence = parseInt(parts[2]) + 1;
+    }
+
+    const seqStr = String(sequence).padStart(3, '0');
+    return `${year}-${month}-${seqStr}`;
+  }
 
   async createInvoice(createInvoiceDto: CreateInvoiceDto) {
     return this.dataSource.transaction(async (manager) => {
@@ -58,11 +82,12 @@ export class InvoiceService {
 
       let subtotal = 0;
       let taxTotal = 0;
-
+      const numero = await this.generateNumero();
       // Create invoice entity
       const invoice = manager.create(Invoice, {
         client,
-        status: InvoicePaymentStatus.DRAFT,
+        invoiceNo: numero,
+        status: createInvoiceDto.status || InvoicePaymentStatus.DRAFT,
         dueDate: createInvoiceDto.dueDate,
         paymentDate: createInvoiceDto.paymentDate || null,
         notes: createInvoiceDto.notes || null,
@@ -123,7 +148,7 @@ export class InvoiceService {
   }
 
   async findAllInvoices(query: InvoiceQueryDto) {
-    const { limit = 10, page = 1, dueDate, status } = query;
+    const { limit = 10, page = 1, search, status } = query;
 
     const qb = this._invoiceRepo
       .createQueryBuilder('invoice')
@@ -134,11 +159,21 @@ export class InvoiceService {
       qb.where('invoice.status = :status', { status });
     }
 
-    if (dueDate) {
-      qb.andWhere(`TO_CHAR(invoice.dueDate, 'YYYY-MM-DD') LIKE :dueDate`, {
-        dueDate: `%${dueDate}%`,
-      });
+    if (search) {
+      qb.andWhere(
+        `client.firstName ILIKE :search 
+        OR client.lastName ILIKE :search
+        OR invoice.invoiceNo ILIKE :search
+       `,
+        { search: `%${search}%` },
+      );
     }
+
+    // if (dueDate) {
+    //   qb.andWhere(`TO_CHAR(invoice.dueDate, 'YYYY-MM-DD') LIKE :dueDate`, {
+    //     dueDate: `%${dueDate}%`,
+    //   });
+    // }
 
     qb.take(Number(limit));
     qb.skip((Number(page) - 1) * Number(limit));

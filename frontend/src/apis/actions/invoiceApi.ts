@@ -18,14 +18,13 @@ export const invoiceApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Invoices"], // force the refresh of the query
     }),
-    // updateStatusClient: builder.mutation<any, { id: string; data: any }>({
-    //   query: ({ id, data }) => ({
-    //     url: `/clients/update-status?id=${id}`,
-    //     method: "PATCH",
-    //     body: data,
-    //   }),
-    //   invalidatesTags: ["Clients"], // force the refresh of the query
-    // }),
+    sendReminderPaymentEmail: builder.mutation<any, any>({
+      query: (id) => ({
+        url: `/invoice/send-reminder?id=${id}`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Invoices"], // force the refresh of the query
+    }),
     // removeClient: builder.mutation<any, { id: string }>({
     //   query: ({ id }) => ({
     //     url: `/clients/remove-client?id=${id}`,
@@ -38,15 +37,15 @@ export const invoiceApi = baseApi.injectEndpoints({
       {
         page?: number;
         limit?: number;
-        dueDate?: string | null;
+        search?: string | null;
         status?: string | null;
       }
     >({
-      query: ({ page = 1, limit = 10, dueDate = "", status = "" }) => {
+      query: ({ page = 1, limit = 10, search = "", status = "" }) => {
         let url = `/invoice/all-invoices?limit=${limit}&page=${page}`;
 
-        if (dueDate) {
-          url += `&status=${dueDate}`;
+        if (search) {
+          url += `&search=${search}`;
         }
         if (status) {
           url += `&status=${status}`;
@@ -63,4 +62,5 @@ export const {
   useFindAllInvoicesQuery,
   useGenerateInvoiceMutation,
   useCreateInvoiceMutation,
+  useSendReminderPaymentEmailMutation,
 } = invoiceApi;

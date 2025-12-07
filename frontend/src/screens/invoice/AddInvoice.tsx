@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Modal from "../../components/Modal";
 import styles from "../../styles/clients.module.scss";
 import style from "../../styles/invoice.module.scss";
@@ -10,6 +10,7 @@ import Select from "../../components/Select";
 import DatePicker from "../../components/DatePicker";
 import Input from "../../components/Input";
 import dayjs from "dayjs";
+import { paymentStatus } from "../../data/data";
 
 interface AddInvoiceProps {
   isModalOpen: boolean;
@@ -46,7 +47,11 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
     () => items.reduce((acc, item) => acc + item.qty * item.price, 0),
     [items]
   );
-  const tax = subtotal * 0.19;
+  const tax =
+    subtotal *
+    items.reduce((acc, item) => {
+      return acc + item.taxRate / 100;
+    }, 0);
   const totalBeforeDiscount = subtotal + tax;
   const discountAmount = (totalBeforeDiscount * discount) / 100;
   const total = totalBeforeDiscount - discountAmount;
@@ -66,6 +71,10 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
     setItems(updated);
   };
 
+  useEffect(() => {
+    form.setFieldsValue({ items });
+  }, [items]);
+
   return (
     <Modal
       title={
@@ -82,13 +91,29 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
       <Form
         form={form}
         layout="vertical"
+        initialValues={{
+          items: items,
+          dueDate: dayjs().add(30, "day").format("YYYY-MM-DD"),
+          paymentDate: dayjs().format("YYYY-MM-DD"),
+        }}
         onFinish={(values) => {
           handleAddInvoice(values);
         }}
       >
         <Row gutter={16}>
-          <Col span={8}>
-            <Form.Item label="Nom du client" name="clientId">
+          <Col span={6}>
+            <Form.Item
+              label={
+                <span className={style["ms--invoice-titles"]}>Client</span>
+              }
+              name="clientId"
+              rules={[
+                {
+                  required: true,
+                  message: "Veuillez choisir un client",
+                },
+              ]}
+            >
               <Select
                 placeholder="Sélectionner un client"
                 options={clients?.map((c: any) => ({
@@ -100,9 +125,13 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
             </Form.Item>
           </Col>
 
-          <Col span={8}>
+          <Col span={6}>
             <Form.Item
-              label="Date de facture"
+              label={
+                <span className={style["ms--invoice-titles"]}>
+                  Date de facture
+                </span>
+              }
               name="paymentDate"
               getValueProps={(value) => ({
                 value: value ? dayjs(value) : undefined,
@@ -113,9 +142,13 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
             </Form.Item>
           </Col>
 
-          <Col span={8}>
+          <Col span={6}>
             <Form.Item
-              label="Échéance"
+              label={
+                <span className={style["ms--invoice-titles"]}>
+                  Date d'écheance
+                </span>
+              }
               name="dueDate"
               getValueProps={(value) => ({
                 value: value ? dayjs(value) : undefined,
@@ -123,6 +156,32 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
               normalize={(value) => value?.format("YYYY-MM-DD")}
             >
               <DatePicker placeholder="AAAA-MM-JJ" />
+            </Form.Item>
+          </Col>
+
+          <Col span={6}>
+            <Form.Item
+              label={
+                <span className={style["ms--invoice-titles"]}>
+                  Status de paiement
+                </span>
+              }
+              name="status"
+              rules={[
+                {
+                  required: true,
+                  message: "Veuillez choisir la status",
+                },
+              ]}
+            >
+              <Select
+                placeholder="Sélectionner la status"
+                options={paymentStatus?.map((status: any) => ({
+                  label: status.label,
+                  value: status.id,
+                }))}
+                classname={styles["ms--select-add-product"]}
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -149,7 +208,12 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
           {items.map((item, i) => (
             <Row key={i} gutter={16} align={"middle"} style={{ marginTop: 12 }}>
               <Col span={10}>
-                <Form.Item name={["items", i, "productId"]}>
+                <Form.Item
+                  name={["items", i, "productId"]}
+                  rules={[
+                    { required: true, message: "Veuillez choisir un produit" },
+                  ]}
+                >
                   <Select
                     placeholder="Nom du produit"
                     options={products?.map((p: any) => ({

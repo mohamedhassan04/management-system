@@ -53,3 +53,26 @@ export const items: MenuProps["items"] = [
     ],
   },
 ];
+
+export const paymentStatus = [
+  {
+    id: "brouillon",
+    label: "Brouillon",
+  },
+  {
+    id: "payé",
+    label: "Payé",
+  },
+  {
+    id: "non_payé",
+    label: "Non payé",
+  },
+  {
+    id: "partiellement_payé",
+    label: "Partiellement payé",
+  },
+  {
+    id: "annulé",
+    label: "Annulé",
+  },
+];

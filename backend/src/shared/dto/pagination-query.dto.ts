@@ -42,6 +42,10 @@ export class InvoiceQueryDto {
   @IsOptional()
   dueDate?: Date;
 
+  @ApiPropertyOptional({ description: 'Search' })
+  @IsOptional()
+  search?: string;
+
   @ApiPropertyOptional({ description: 'Search by status' })
   @IsOptional()
   @IsString()

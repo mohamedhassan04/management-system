@@ -9,7 +9,9 @@ import {
   IsArray,
   ArrayMinSize,
   ValidateNested,
+  IsEnum,
 } from 'class-validator';
+import { InvoicePaymentStatus } from 'src/shared/enum/enum.type';
 
 export class CreateInvoiceItemDto {
   @ApiProperty({ example: 'a1b2c3', description: 'Product ID' })
@@ -76,4 +78,12 @@ export class CreateInvoiceDto {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @ApiProperty({
+    example: InvoicePaymentStatus.PAID,
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(InvoicePaymentStatus)
+  status?: InvoicePaymentStatus;
 }

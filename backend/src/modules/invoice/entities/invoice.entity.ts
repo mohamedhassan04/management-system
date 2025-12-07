@@ -19,7 +19,7 @@ export class Invoice extends Node {
   })
   status: InvoicePaymentStatus;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   invoiceNo: string;
 
   @Column('decimal', { precision: 10, scale: 2, default: 0 })

@@ -15,7 +15,6 @@ import Button from "../../components/Button";
 import Input from "../../components/Input";
 import Table from "../../components/Table";
 import { HiDocumentAdd } from "react-icons/hi";
-import { RiEditFill } from "react-icons/ri";
 import { IoMdSearch } from "react-icons/io";
 import AddInvoice from "./AddInvoice";
 import { useFindAllClientsQuery } from "../../apis/actions/clientApi";
@@ -23,10 +22,14 @@ import {
   useCreateInvoiceMutation,
   useFindAllInvoicesQuery,
   useGenerateInvoiceMutation,
+  useSendReminderPaymentEmailMutation,
 } from "../../apis/actions/invoiceApi";
 import invoice from "../../assets/images/icons/invoice.svg";
 import ViewInvoice from "./ViewInvoice";
 import { useFindAllProductsQuery } from "../../apis/actions/productApi";
+import Select from "../../components/Select";
+import { paymentStatus } from "../../data/data";
+import { BsFillSendFill } from "react-icons/bs";
 
 interface InvoiceProps {
   api: ReturnType<typeof notification.useNotification>[0];
@@ -41,13 +44,14 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [selectedInvoice, setSelectedInvoice] = useState<null | any>(null);
 
   const { data: clients } = useFindAllClientsQuery({});
   const { data: products } = useFindAllProductsQuery({});
   const { data, isLoading } = useFindAllInvoicesQuery({
     page,
     limit: 10,
-    dueDate: "",
+    search: searchTerm,
     status: status,
   });
 
@@ -57,11 +61,16 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
   const [createInvoice, { isLoading: isLoadingCreateInvoice }] =
     useCreateInvoiceMutation();
 
+  const [
+    sendReminderPaymentEmail,
+    { isLoading: isLoadingSendReminderPaymentEmail },
+  ] = useSendReminderPaymentEmailMutation();
+
   // Function to add a new invoice
   const handleAddInvoice = async () => {
     try {
+      form.validateFields();
       const values = form.getFieldsValue();
-
       await createInvoice(values).unwrap();
       api.success({
         message: "Nouveau facture ajouté",
@@ -71,7 +80,6 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
       form.resetFields();
       setIsModalOpen(false);
     } catch (error) {
-      console.log(error);
       api.error({
         message: "Erreur d'ajout",
         description:
@@ -83,10 +91,30 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
 
   const handleViewInvoice = async (factureId: string) => {
     try {
+      setSelectedInvoice(factureId);
       const blob = await generateInvoice({ factureId }).unwrap();
       const url = URL.createObjectURL(blob);
       setPdfUrl(url);
       setIsOpen(true);
+    } catch (error) {
+      api.error({
+        message: "Erreur de génération",
+        description:
+          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        placement: "bottomRight",
+      });
+    }
+  };
+
+  const handleSendReminderEmail = async (id: string) => {
+    try {
+      setSelectedInvoice(id);
+      await sendReminderPaymentEmail(id).unwrap();
+      api.success({
+        message: "Email envoyé",
+        description: "L'email a été envoyé avec succès.",
+        placement: "bottomRight",
+      });
     } catch (error) {
       api.error({
         message: "Erreur de génération",
@@ -122,7 +150,7 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
       render: (status: any) => <StatusTag status={status} />,
     },
     {
-      title: "Date de création",
+      title: "Date d'écheance",
       dataIndex: "dueDate",
       key: "dueDate",
     },
@@ -140,16 +168,21 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
         <Space size="small">
           <button
             className={styles["ms--client-actions"]}
-            // onClick={() => handleShowEditModal(record)}
+            onClick={() => handleSendReminderEmail(record.id)}
           >
-            <RiEditFill size={18} color="#656c8c" />
+            {isLoadingSendReminderPaymentEmail &&
+            selectedInvoice === record.id ? (
+              <Spin size="small" />
+            ) : (
+              <BsFillSendFill size={18} color="#0077ff" />
+            )}
           </button>
 
           <button
             className={styles["ms--client-actions"]}
             onClick={() => handleViewInvoice(record.id)}
           >
-            {isLoadingInvoice && record.id ? (
+            {isLoadingInvoice && selectedInvoice === record.id ? (
               <Spin size="small" />
             ) : (
               <img src={invoice} alt="invoice" width={18} />
@@ -178,12 +211,26 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
       </Row>
       <div className={styles["ms--client-table-container"]}>
         <Row style={{ marginBottom: "1.5rem" }} align="middle" gutter={16}>
-          <Col span={16}>
+          <Col span={20}>
             <Input
-              placeholder="Rechercher une facture par son nom ..."
+              placeholder="Rechercher une facture par nom de client ou numéro de facture..."
               className={styles["ms--client-input"]}
               suffix={<IoMdSearch size={20} />}
               onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Col>
+
+          <Col span={4}>
+            <Select
+              placeholder="Status"
+              options={paymentStatus?.map((status: any) => ({
+                label: status.label,
+                value: status.id,
+              }))}
+              onChange={(e) => {
+                setStatus(e);
+              }}
+              classname={styles["ms--client-select"]}
             />
           </Col>
         </Row>
