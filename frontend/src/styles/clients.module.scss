@@ -146,3 +146,17 @@
   font-variation-settings: "wght" variables.$font-weight-normal !important;
   gap: 0.25rem;
 }
+
+.ms--popover-item {
+  @include flex(null, null, center, 1rem);
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  span {
+    @include fluid-font(0.6, 0.9);
+    @include color($text: variables.$color-black-mate);
+    font-family: variables.$font-family-ibm !important;
+    font-weight: variables.$font-weight-semibold !important;
+    font-variation-settings: "wght" variables.$font-weight-semibold !important;
+    text-transform: capitalize;
+  }
+}

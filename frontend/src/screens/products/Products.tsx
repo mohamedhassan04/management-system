@@ -294,34 +294,20 @@ const Products: React.FC<ProductsProps> = ({ api }) => {
             content={
               <>
                 <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "1rem",
-                    cursor: "pointer",
-                    marginBottom: "0.5rem",
-                  }}
+                  className={styles["ms--popover-item"]}
+                  onClick={() => handleShowProductDetails(record)}
                 >
-                  <button
-                    className={styles["ms--client-actions"]}
-                    onClick={() => handleShowProductDetails(record)}
-                  >
-                    <FaCircleInfo size={18} color="#656c8c" />
+                  <button className={styles["ms--client-actions"]}>
+                    <FaCircleInfo size={18} color="#14ba83" />
                   </button>
                   <span>Détail du produit</span>
                 </div>
                 <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "1rem",
-                    cursor: "pointer",
-                    marginBottom: "0.5rem",
-                  }}
+                  className={styles["ms--popover-item"]}
                   onClick={() => handleShowAddStockModal(record)}
                 >
                   <button className={styles["ms--client-actions"]}>
-                    <BiPlusMedical size={18} color="#656c8c" />
+                    <BiPlusMedical size={18} color="#0077ff" />
                   </button>
                   <span>Ajouter stock</span>
                 </div>
