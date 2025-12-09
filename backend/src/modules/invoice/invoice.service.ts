@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   HttpStatus,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -21,6 +22,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EmailService } from 'src/shared/send-mail/mail.service';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { Client } from '../clients/entities/client.entity';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 writtenNumber.defaults.lang = 'fr';
 
@@ -31,6 +34,7 @@ export class InvoiceService {
     private readonly _invoiceRepo: Repository<Invoice>,
     private readonly dataSource: DataSource,
     private readonly mailerService: EmailService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async generateNumero(): Promise<string> {
@@ -138,7 +142,7 @@ export class InvoiceService {
 
       // Save invoice and all items (cascade handles invoiceItems)
       await manager.save(invoice);
-
+      await this.cacheManager.clear();
       // Return invoice with items and product info
       return {
         HttpStatus: HttpStatus.CREATED,

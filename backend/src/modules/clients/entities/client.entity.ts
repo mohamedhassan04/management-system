@@ -6,9 +6,11 @@ import { Column, DeleteDateColumn, Entity, Index, ManyToOne } from 'typeorm';
 @Entity('tb_clients')
 export class Client extends Node {
   @Column({ type: 'varchar', length: 40 })
+  @Index()
   firstName: string;
 
   @Column({ type: 'varchar', length: 40 })
+  @Index()
   lastName: string;
 
   @Index({ unique: true })
@@ -16,12 +18,14 @@ export class Client extends Node {
   email: string;
 
   @Column({ type: 'varchar', length: 20 })
+  @Index()
   phone: string;
 
   @Column({ type: 'varchar', length: 100 })
   address: string;
 
   @Column({ type: 'enum', enum: ClientStatus, default: ClientStatus.ACTIVE })
+  @Index()
   status: ClientStatus;
 
   @Column({ type: 'varchar', nullable: true })
