@@ -56,7 +56,7 @@ export const items: MenuProps["items"] = [
 
 export const paymentStatus = [
   {
-    id: "brouillon",
+    id: "Brouillon",
     label: "Brouillon",
   },
   {
@@ -74,5 +74,28 @@ export const paymentStatus = [
   {
     id: "annulé",
     label: "Annulé",
+  },
+];
+
+export const estimateStatus = [
+  {
+    id: "Brouillon",
+    label: "Brouillon",
+  },
+  {
+    id: "Envoyé",
+    label: "Envoyé",
+  },
+  {
+    id: "Accepté",
+    label: "Accepté",
+  },
+  {
+    id: "Refusé",
+    label: "Refusé",
+  },
+  {
+    id: "Facturé",
+    label: "Facturé",
   },
 ];

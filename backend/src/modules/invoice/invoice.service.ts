@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   HttpStatus,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -22,8 +21,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EmailService } from 'src/shared/send-mail/mail.service';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { Client } from '../clients/entities/client.entity';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
+import { generateNumero } from 'src/shared/utils/utils';
 
 writtenNumber.defaults.lang = 'fr';
 
@@ -34,33 +32,7 @@ export class InvoiceService {
     private readonly _invoiceRepo: Repository<Invoice>,
     private readonly dataSource: DataSource,
     private readonly mailerService: EmailService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
-
-  async generateNumero(): Promise<string> {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // 01-12
-
-    // Chercher le dernier numéro pour ce mois/année
-    const lastInvoice = await this._invoiceRepo
-      .createQueryBuilder('invoice')
-      .where('EXTRACT(YEAR FROM invoice.paymentDate) = :year', { year })
-      .andWhere('EXTRACT(MONTH FROM invoice.paymentDate) = :month', {
-        month: parseInt(month),
-      })
-      .orderBy('invoice.invoiceNo', 'DESC')
-      .getOne();
-    let sequence = 1;
-    if (lastInvoice) {
-      // Prendre le dernier numéro séquentiel
-      const parts = lastInvoice?.invoiceNo?.split('-');
-      sequence = parseInt(parts[2]) + 1;
-    }
-
-    const seqStr = String(sequence).padStart(3, '0');
-    return `${year}-${month}-${seqStr}`;
-  }
 
   async createInvoice(createInvoiceDto: CreateInvoiceDto) {
     return this.dataSource.transaction(async (manager) => {
@@ -86,7 +58,14 @@ export class InvoiceService {
 
       let subtotal = 0;
       let taxTotal = 0;
-      const numero = await this.generateNumero();
+
+      const numero = await generateNumero({
+        repo: this._invoiceRepo,
+        dateColumn: 'dueDate',
+        numberColumn: 'invoiceNo',
+        padding: 4,
+      });
+
       // Create invoice entity
       const invoice = manager.create(Invoice, {
         client,
@@ -142,7 +121,6 @@ export class InvoiceService {
 
       // Save invoice and all items (cascade handles invoiceItems)
       await manager.save(invoice);
-      await this.cacheManager.clear();
       // Return invoice with items and product info
       return {
         HttpStatus: HttpStatus.CREATED,
@@ -459,5 +437,19 @@ export class InvoiceService {
         else resolve(buffer);
       });
     });
+  }
+
+  async deleteInvoice(id: string) {
+    const invoice = await this._invoiceRepo.findOne({ where: { id } });
+
+    if (!invoice) {
+      throw new NotFoundException('Facture introuvable');
+    }
+
+    await this._invoiceRepo.softDelete(invoice.id);
+    return {
+      status: HttpStatus.OK,
+      success: 'Facture supprimé avec success',
+    };
   }
 }

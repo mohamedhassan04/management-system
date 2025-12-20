@@ -21,3 +21,11 @@ export enum InvoicePaymentStatus {
   PARTIALLY_PAID = 'partiellement_payé',
   CANCELLED = 'annulé',
 }
+
+export enum EstimateStatus {
+  DRAFT = 'Brouillon',
+  SENT = 'Envoyé',
+  ACCEPTED = 'Accepté',
+  REFUSED = 'Refusé',
+  FACTURED = 'Facturé',
+}

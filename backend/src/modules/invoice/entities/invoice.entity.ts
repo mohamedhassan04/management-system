@@ -1,4 +1,10 @@
-import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  OneToMany,
+  ManyToOne,
+  DeleteDateColumn,
+} from 'typeorm';
 import { InvoiceItem } from './invoice-item.entity';
 import { Node } from 'src/shared/node/common.entity';
 import { InvoicePaymentStatus } from 'src/shared/enum/enum.type';
@@ -39,4 +45,7 @@ export class Invoice extends Node {
 
   @Column({ nullable: true })
   notes: string;
+
+  @DeleteDateColumn({ nullable: true, type: 'timestamp' })
+  deletedAt?: Date;
 }

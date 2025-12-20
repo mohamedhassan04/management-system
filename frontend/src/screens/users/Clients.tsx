@@ -68,6 +68,7 @@ const Clients: React.FC<ClientsProps> = ({ api }) => {
       });
       setSelectedClient(null);
       setIsEditModalOpen(false);
+      form.resetFields();
     } catch (error) {
       api.error({
         message: "Erreur de mise à jour",

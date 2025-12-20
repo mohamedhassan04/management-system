@@ -10,6 +10,7 @@ import {
   Put,
   Res,
   NotFoundException,
+  Delete,
 } from '@nestjs/common';
 import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
@@ -73,7 +74,7 @@ export class InvoiceController {
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'status', required: false })
   @ApiQuery({ name: 'dueDate', required: false })
-  async findAllProducts(@Query() query: InvoiceQueryDto) {
+  async findAllInvoices(@Query() query: InvoiceQueryDto) {
     return await this.invoiceService.findAllInvoices(query);
   }
 
@@ -159,8 +160,8 @@ export class InvoiceController {
     description: 'Failed to generate and download invoice PDF.',
   })
   @ApiCookieAuth('access_token')
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('USER')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('USER')
   @Post('generate-invoice')
   async generateInvoice(
     @Query('factureId') factureId: string,
@@ -178,5 +179,25 @@ export class InvoiceController {
     });
 
     res.end(pdfBuffer);
+  }
+
+  //@Method DELETE
+  //@desc Delete a invoice
+  //@Path: /delete-invoice
+  @ApiOperation({ summary: 'Delete a invoice' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Delete invoice successfully.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Failed to delete invoice.',
+  })
+  @ApiCookieAuth('access_token')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('USER')
+  @Delete('delete-invoice')
+  async removeInvoice(@Query('id') id: string) {
+    return await this.invoiceService.deleteInvoice(id);
   }
 }

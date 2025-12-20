@@ -24,6 +24,7 @@ export const baseApi = createApi({
     "Invoices",
     "Categories",
     "Suppliers",
+    "Estimates",
   ],
   endpoints: () => ({}),
 });

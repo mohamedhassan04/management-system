@@ -1,19 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
-  IsUUID,
-  IsString,
+  ArrayMinSize,
+  IsArray,
+  IsEnum,
   IsNumber,
   IsOptional,
+  IsString,
+  IsUUID,
   Min,
-  IsArray,
-  ArrayMinSize,
   ValidateNested,
-  IsEnum,
 } from 'class-validator';
-import { InvoicePaymentStatus } from 'src/shared/enum/enum.type';
+import { EstimateStatus } from 'src/shared/enum/enum.type';
 
-export class CreateInvoiceItemDto {
+export class CreateEstimateItemDto {
   @ApiProperty({ example: 'a1b2c3', description: 'Product ID' })
   @IsUUID('4')
   productId: string;
@@ -42,7 +42,7 @@ export class CreateInvoiceItemDto {
   taxRate?: number;
 }
 
-export class CreateInvoiceDto {
+export class CreateEstimateDto {
   @ApiProperty({
     example: 'c7f8f2a1-7b42-4e88-9f43-d5f1b1d5e8c3',
     required: false,
@@ -54,22 +54,17 @@ export class CreateInvoiceDto {
 
   @ApiProperty({ example: '2025-12-31', description: 'Invoice due date' })
   @IsString()
-  dueDate: string;
-
-  @ApiProperty({ example: '2025-12-31', description: 'Invoice due date' })
-  @IsString()
-  @IsOptional()
-  paymentDate?: string;
+  date: string;
 
   @ApiProperty({
-    type: [CreateInvoiceItemDto],
+    type: [CreateEstimateItemDto],
     description: 'List of items inside the invoice',
   })
   @IsArray()
   @ArrayMinSize(1)
   @ValidateNested({ each: true })
-  @Type(() => CreateInvoiceItemDto)
-  items: CreateInvoiceItemDto[];
+  @Type(() => CreateEstimateItemDto)
+  items: CreateEstimateItemDto[];
 
   @ApiProperty({
     example: 'Thanks for your purchase!',
@@ -81,10 +76,10 @@ export class CreateInvoiceDto {
   notes?: string;
 
   @ApiProperty({
-    example: InvoicePaymentStatus.PAID,
+    example: EstimateStatus.DRAFT,
     required: false,
   })
   @IsOptional()
-  @IsEnum(InvoicePaymentStatus)
-  status?: InvoicePaymentStatus;
+  @IsEnum(EstimateStatus)
+  status?: EstimateStatus;
 }

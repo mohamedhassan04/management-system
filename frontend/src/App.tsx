@@ -4,6 +4,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import DashboardLayout from "./layout/DashboardLayout";
 import ProtectedRoute from "./apis/utils/ProtectedRoute";
 import { notification } from "antd";
+import Estimate from "./screens/estimate/Estimate";
 
 const Login = lazy(() => import("./screens/login/Login"));
 const Clients = lazy(() => import("./screens/users/Clients"));
@@ -31,7 +32,7 @@ function App() {
             <Route path="/users" element={<Clients api={api} />} />
             <Route path="/products" element={<Products api={api} />} />
             <Route path="/invoices" element={<Invoice api={api} />} />
-            <Route path="/devis" element={<h1>Devis</h1>} />
+            <Route path="/devis" element={<Estimate api={api} />} />
             <Route path="/suplliers" element={<Suplliers api={api} />} />
           </Route>
         </Routes>

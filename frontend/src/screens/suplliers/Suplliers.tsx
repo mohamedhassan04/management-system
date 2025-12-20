@@ -63,6 +63,7 @@ const Suplliers: React.FC<SupllierProps> = ({ api }) => {
       });
       setSelectedSupllier(null);
       setIsEditModalOpen(false);
+      form.resetFields();
     } catch (error) {
       api.error({
         message: "Erreur de mise à jour",

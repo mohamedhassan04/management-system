@@ -26,4 +26,28 @@ export class EmailService {
       );
     }
   }
+
+  async sendEstimateEmail(
+    pdfBuffer: Buffer,
+    clientEmail: string,
+  ): Promise<void> {
+    await this.mailerService.sendMail({
+      to: clientEmail,
+      subject: 'Votre devis',
+      html: `
+        <p>Bonjour,</p>
+        <p>Veuillez trouver ci-joint votre devis.</p>
+        <p>Merci de nous avoir fait confiance.</p>
+        <br />
+        <p>Cordialement,<br/>Votre société</p>
+      `,
+      attachments: [
+        {
+          filename: 'devis.pdf',
+          content: pdfBuffer,
+          contentType: 'application/pdf',
+        },
+      ],
+    });
+  }
 }

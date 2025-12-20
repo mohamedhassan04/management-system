@@ -10,5 +10,6 @@ import { EmailService } from 'src/shared/send-mail/mail.service';
   imports: [TypeOrmModule.forFeature([Invoice, InvoiceItem])],
   controllers: [InvoiceController],
   providers: [InvoiceService, EmailService],
+  exports: [InvoiceService],
 })
 export class InvoiceModule {}

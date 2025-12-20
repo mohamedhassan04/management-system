@@ -17,29 +17,29 @@ import Input from "../../components/Input";
 import Table from "../../components/Table";
 import { HiDocumentAdd } from "react-icons/hi";
 import { IoMdSearch } from "react-icons/io";
-import AddInvoice from "./AddInvoice";
+import AddInvoice from "./AddEstimate";
 import { useFindAllClientsQuery } from "../../apis/actions/clientApi";
-import {
-  useCreateInvoiceMutation,
-  useFindAllInvoicesQuery,
-  useGenerateInvoiceMutation,
-  useRemoveInvoiceMutation,
-  useSendReminderPaymentEmailMutation,
-} from "../../apis/actions/invoiceApi";
+import { useRemoveInvoiceMutation } from "../../apis/actions/invoiceApi";
 import invoice from "../../assets/images/icons/invoice.svg";
-import ViewInvoice from "./ViewInvoice";
+import ViewInvoice from "./ViewEstimate";
 import { useFindAllProductsQuery } from "../../apis/actions/productApi";
 import Select from "../../components/Select";
-import { paymentStatus } from "../../data/data";
+import { estimateStatus } from "../../data/data";
 import { BsFillSendFill } from "react-icons/bs";
 import { FcFullTrash } from "react-icons/fc";
 import { RiDeleteBin6Fill } from "react-icons/ri";
+import {
+  useCreateEstimateMutation,
+  useFindAllEstimatesQuery,
+  useGenerateEstimateMutation,
+  useSendEstimateByEmailMutation,
+} from "../../apis/actions/estimate";
 
-interface InvoiceProps {
+interface EstimateProps {
   api: ReturnType<typeof notification.useNotification>[0];
 }
 
-const Invoice: React.FC<InvoiceProps> = ({ api }) => {
+const Estimate: React.FC<EstimateProps> = ({ api }) => {
   const [form] = Form.useForm();
 
   const [page, setPage] = useState<number>(1);
@@ -48,39 +48,37 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const [selectedInvoice, setSelectedInvoice] = useState<null | any>(null);
+  const [selectedEstimate, setSelectedEstimate] = useState<null | any>(null);
 
   const { data: clients } = useFindAllClientsQuery({});
   const { data: products } = useFindAllProductsQuery({});
-  const { data, isLoading } = useFindAllInvoicesQuery({
+  const { data, isLoading } = useFindAllEstimatesQuery({
     page,
     limit: 10,
     search: searchTerm,
     status: status,
   });
 
-  const [generateInvoice, { isLoading: isLoadingInvoice }] =
-    useGenerateInvoiceMutation();
+  const [generateEstimate, { isLoading: isLoadingInvoice }] =
+    useGenerateEstimateMutation();
 
-  const [createInvoice, { isLoading: isLoadingCreateInvoice }] =
-    useCreateInvoiceMutation();
+  const [createEstimate, { isLoading: isLoadingCreateInvoice }] =
+    useCreateEstimateMutation();
 
-  const [
-    sendReminderPaymentEmail,
-    { isLoading: isLoadingSendReminderPaymentEmail },
-  ] = useSendReminderPaymentEmailMutation();
+  const [sendEstimateByEmail, { isLoading: isLoadingSendEstimate }] =
+    useSendEstimateByEmailMutation();
 
   const [removeInvoice] = useRemoveInvoiceMutation();
 
-  // Function to add a new invoice
-  const handleAddInvoice = async () => {
+  // Function to add a new estimate
+  const handleAddEstimate = async () => {
     try {
       form.validateFields();
       const values = form.getFieldsValue();
-      await createInvoice(values).unwrap();
+      await createEstimate(values).unwrap();
       api.success({
-        message: "Nouveau facture ajouté",
-        description: "La facture a été ajouté avec succès.",
+        message: "Nouveau devis ajouté",
+        description: "Le devise a été ajouté avec succès.",
         placement: "bottomRight",
       });
       form.resetFields();
@@ -95,10 +93,10 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
     }
   };
 
-  const handleViewInvoice = async (factureId: string) => {
+  const handleViewEstimate = async (estimateId: string) => {
     try {
-      setSelectedInvoice(factureId);
-      const blob = await generateInvoice({ factureId }).unwrap();
+      setSelectedEstimate(estimateId);
+      const blob = await generateEstimate({ estimateId }).unwrap();
       const url = URL.createObjectURL(blob);
       setPdfUrl(url);
       setIsOpen(true);
@@ -112,10 +110,10 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
     }
   };
 
-  const handleSendReminderEmail = async (id: string) => {
+  const handleSendEstimateByEmail = async (id: string) => {
     try {
-      setSelectedInvoice(id);
-      await sendReminderPaymentEmail(id).unwrap();
+      setSelectedEstimate(id);
+      await sendEstimateByEmail(id).unwrap();
       api.success({
         message: "Email envoyé",
         description: "L'email a été envoyé avec succès.",
@@ -163,8 +161,8 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
     },
     {
       title: "Numéro de facture",
-      dataIndex: "invoiceNo",
-      key: "invoiceNo",
+      dataIndex: "estimateNo",
+      key: "estimateNo",
     },
     {
       title: "Status",
@@ -174,9 +172,9 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
       render: (status: any) => <StatusTag status={status} />,
     },
     {
-      title: "Date d'écheance",
-      dataIndex: "dueDate",
-      key: "dueDate",
+      title: "Date de devis",
+      dataIndex: "date",
+      key: "date",
     },
     {
       title: "Montant total",
@@ -192,10 +190,9 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
         <Space size="small">
           <button
             className={styles["ms--client-actions"]}
-            onClick={() => handleSendReminderEmail(record.id)}
+            onClick={() => handleSendEstimateByEmail(record.id)}
           >
-            {isLoadingSendReminderPaymentEmail &&
-            selectedInvoice === record.id ? (
+            {isLoadingSendEstimate && selectedEstimate === record.id ? (
               <Spin size="small" />
             ) : (
               <BsFillSendFill size={18} color="#0077ff" />
@@ -204,9 +201,9 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
 
           <button
             className={styles["ms--client-actions"]}
-            onClick={() => handleViewInvoice(record.id)}
+            onClick={() => handleViewEstimate(record.id)}
           >
-            {isLoadingInvoice && selectedInvoice === record.id ? (
+            {isLoadingInvoice && selectedEstimate === record.id ? (
               <Spin size="small" />
             ) : (
               <img src={invoice} alt="invoice" width={18} />
@@ -233,12 +230,12 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
             }}
             title={
               <span className={styles["ms--popconfirm-title"]}>
-                Supprimer cette facture
+                Supprimer ce devis
               </span>
             }
             description={
               <span className={styles["ms--popconfirm-description"]}>
-                Voulez-vous vraiment supprimer cette facture ?
+                Voulez-vous vraiment supprimer ce devis ?
               </span>
             }
             icon={<FcFullTrash size={20} />}
@@ -258,7 +255,7 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
     <>
       <Row justify="space-between" align="middle">
         <Col span={20}>
-          <h1 className={styles["ms--client-title"]}>Mes factures</h1>
+          <h1 className={styles["ms--client-title"]}>Mes devis</h1>
         </Col>
         <Col span={4}>
           <Button
@@ -266,7 +263,7 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
             className={styles["ms--client-btn"]}
             onClick={() => setIsModalOpen(true)}
           >
-            Créer une facture
+            Créer un devis
           </Button>
         </Col>
       </Row>
@@ -274,7 +271,7 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
         <Row style={{ marginBottom: "1.5rem" }} align="middle" gutter={16}>
           <Col span={20}>
             <Input
-              placeholder="Rechercher une facture par nom de client ou numéro de facture..."
+              placeholder="Rechercher un devis par nom de client ou numéro de devis..."
               className={styles["ms--client-input"]}
               suffix={<IoMdSearch size={20} />}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -284,7 +281,7 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
           <Col span={4}>
             <Select
               placeholder="Status"
-              options={paymentStatus?.map((status: any) => ({
+              options={estimateStatus?.map((status: any) => ({
                 label: status.label,
                 value: status.id,
               }))}
@@ -321,7 +318,7 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
         isModalOpen={isModalOpen}
         setIsModalOpen={() => setIsModalOpen(false)}
         form={form}
-        handleAddInvoice={handleAddInvoice}
+        handleAddInvoice={handleAddEstimate}
         clients={clients?.items}
         products={products?.items}
         loading={isLoadingCreateInvoice}
@@ -332,4 +329,4 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
   );
 };
 
-export default Invoice;
+export default Estimate;

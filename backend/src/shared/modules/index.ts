@@ -1,6 +1,7 @@
 import { AuthenticationModule } from 'src/modules/auth/auth.module';
 import { CategoriesModule } from 'src/modules/categories/categories.module';
 import { ClientsModule } from 'src/modules/clients/clients.module';
+import { EstimateModule } from 'src/modules/estimate/estimate.module';
 import { InvoiceModule } from 'src/modules/invoice/invoice.module';
 import { ProductModule } from 'src/modules/product/product.module';
 import { SupllierModule } from 'src/modules/supllier/supllier.module';
@@ -14,4 +15,5 @@ export const AllModules = [
   CategoriesModule,
   SupllierModule,
   InvoiceModule,
+  EstimateModule,
 ];

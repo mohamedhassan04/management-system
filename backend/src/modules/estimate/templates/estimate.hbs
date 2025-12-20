@@ -1,0 +1,176 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Estimate</title>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #1a1a1a;
+      }
+      .invoice-box {
+        width: 794px; /* A4 width in px for 96dpi */
+        padding: 25px;
+        box-sizing: border-box;
+      }
+      h1 {
+        color: #854fff;
+        font-size: 48px;
+        font-weight: 900;
+        margin: 0;
+      }
+      h2 {
+        font-size: 12px;
+        font-weight: 600;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 0 0 12px 0;
+      }
+      h3 {
+        font-weight: 600;
+        margin: 0 0 8px 0;
+      }
+      p {
+        margin: 2px 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+      }
+      table th {
+        background-color: #f8f9fa;
+        padding: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #854fff;
+        border-bottom: 1px solid #e9ecef;
+      }
+      table td {
+        padding: 12px;
+        border-bottom: 1px solid #e9ecef;
+        vertical-align: top;
+      }
+      table td.text-right {
+        text-align: right;
+      }
+      table td.text-center {
+        text-align: center;
+      }
+      .totals {
+        margin-top: 32px;
+        width: 100%;
+        max-width: 256px;
+        float: right;
+      }
+      .totals div {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+      }
+      .totals .total {
+        font-weight: 700;
+        font-size: 20px;
+        color: #854fff;
+        border-top: 2px solid #e9ecef;
+        padding-top: 12px;
+        margin-top: 16px;
+      }
+      .section {
+        margin-top: 120px;
+        clear: both;
+      }
+      footer {
+        text-align: center;
+        font-size: 12px;
+        color: #6c757d;
+        margin-top: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='invoice-box'>
+      <!-- Header -->
+      <table style='width:100%; margin-bottom:32px;'>
+        <tr>
+          <td>
+            <!-- Empty for logo -->
+          </td>
+          <td style='text-align:right;'>
+            <p>Devis N° <strong>{{numEstimate}}</strong></p>
+            <p>Date: <strong>{{date}}</strong></p>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Billing Info -->
+      <table style='width:100%; margin-bottom:32px;'>
+        <tr>
+          <td>
+            <h2>Détails du client</h2>
+            <p><strong>{{customer.name}}</strong></p>
+            <p>{{customer.address}}</p>
+            <p>{{customer.email}}</p>
+            <p>{{customer.phoneNumber}}</p>
+          </td>
+          <td style='text-align:right;'>
+            <h2>Détails de l'entreprise</h2>
+            <p><strong>Your Company LLC</strong></p>
+            <p>456 Company Ave, Building 8</p>
+            <p>your-email@company.com</p>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Items Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>Description du produit</th>
+            <th class='text-center'>quantité</th>
+            <th class='text-right'>prix unitaire</th>
+            <th class='text-right'>tva</th>
+            <th class='text-right'>montant</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each items}}
+            <tr>
+              <td>{{this.product}}</td>
+              <td>{{this.qty}} </td>
+              <td>{{this.unitPrice}} DT</td>
+              <td>19%</td>
+              <td>{{this.lineTotal}} DT</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+      <!-- Totals -->
+      <div class='totals'>
+        <div><span>Total HT</span><span> {{totalHT}} DT</span></div>
+        <div><span>TVA (19%)</span><span> {{totalTVA}} DT</span></div>
+        <div class='total'><span>Total TTC</span><span>
+            {{totalTTC}}
+            DT</span></div>
+      </div>
+
+      <!-- Payment Terms -->
+      <div style='margin-top: 2rem; clear: both; text-align: center'>
+        <p
+          style='color:#854fff; font-size:15px; font-weight:400; font-style:italic;'
+        >Cette devis est arrétée à la somme de
+          {{amountInWords}}</p>
+      </div>
+
+      <!-- Footer -->
+      <footer>
+        <p>456 Company Ave, Building 8, City, State, 67890</p>
+        <p>+1 (555) 123-4567 | your-email@company.com | www.yourcompany.com</p>
+      </footer>
+    </div>
+  </body>
+</html>

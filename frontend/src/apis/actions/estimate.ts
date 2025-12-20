@@ -1,29 +1,29 @@
 import { baseApi } from "../utils/baseApi";
 
-export const invoiceApi = baseApi.injectEndpoints({
+export const estimateApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    createInvoice: builder.mutation<{ user: any }, any>({
+    createEstimate: builder.mutation<{ user: any }, any>({
       query: (data) => ({
-        url: "/invoice/create",
+        url: "/estimate/create",
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Invoices"], // force the refresh of the query
+      invalidatesTags: ["Estimates"], // force the refresh of the query
     }),
-    generateInvoice: builder.mutation<any, { factureId: string }>({
-      query: ({ factureId }) => ({
-        url: `/invoice/generate-invoice?factureId=${factureId}`,
+    generateEstimate: builder.mutation<any, { estimateId: string }>({
+      query: ({ estimateId }) => ({
+        url: `/estimate/generate-estimate?estimateId=${estimateId}`,
         method: "POST",
         responseHandler: (response: any) => response.blob(),
       }),
-      invalidatesTags: ["Invoices"], // force the refresh of the query
+      invalidatesTags: ["Estimates"], // force the refresh of the query
     }),
-    sendReminderPaymentEmail: builder.mutation<any, any>({
+    sendEstimateByEmail: builder.mutation<any, any>({
       query: (id) => ({
-        url: `/invoice/send-reminder?id=${id}`,
+        url: `/estimate/send-estimate?id=${id}`,
         method: "POST",
       }),
-      invalidatesTags: ["Invoices"], // force the refresh of the query
+      invalidatesTags: ["Estimates"], // force the refresh of the query
     }),
     removeInvoice: builder.mutation<any, { id: string }>({
       query: ({ id }) => ({
@@ -32,7 +32,7 @@ export const invoiceApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Invoices"], // force the refresh of the query
     }),
-    findAllInvoices: builder.query<
+    findAllEstimates: builder.query<
       any,
       {
         page?: number;
@@ -42,7 +42,7 @@ export const invoiceApi = baseApi.injectEndpoints({
       }
     >({
       query: ({ page = 1, limit = 10, search = "", status = "" }) => {
-        let url = `/invoice/all-invoices?limit=${limit}&page=${page}`;
+        let url = `/estimate/all-estimates?limit=${limit}&page=${page}`;
 
         if (search) {
           url += `&search=${search}`;
@@ -53,15 +53,15 @@ export const invoiceApi = baseApi.injectEndpoints({
 
         return url;
       },
-      providesTags: ["Invoices"],
+      providesTags: ["Estimates"],
     }),
   }),
 });
 
 export const {
-  useFindAllInvoicesQuery,
-  useGenerateInvoiceMutation,
-  useCreateInvoiceMutation,
-  useSendReminderPaymentEmailMutation,
+  useCreateEstimateMutation,
+  useGenerateEstimateMutation,
+  useSendEstimateByEmailMutation,
   useRemoveInvoiceMutation,
-} = invoiceApi;
+  useFindAllEstimatesQuery,
+} = estimateApi;

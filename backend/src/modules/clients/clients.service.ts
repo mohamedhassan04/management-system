@@ -1,9 +1,4 @@
-import {
-  HttpStatus,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,15 +7,12 @@ import { Repository } from 'typeorm';
 import { Users } from '../user/entities/user.entity';
 import { ClientQueryDto } from 'src/shared/dto/pagination-query.dto';
 import { ClientStatus } from 'src/shared/enum/enum.type';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
 
 @Injectable()
 export class ClientsService {
   constructor(
     @InjectRepository(Client) private readonly _clientRepo: Repository<Client>,
     @InjectRepository(Users) private readonly _userRepo: Repository<Users>,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
   async createClient(createClientDto: CreateClientDto, user: Users) {
     const exist = await this._userRepo.findOneBy({ id: user.id });
@@ -41,23 +33,6 @@ export class ClientsService {
 
   async findAllClientsByUser(query: ClientQueryDto, user: Users) {
     const { limit = 10, page = 1, status, search } = query;
-
-    // Cache key
-    const cacheKey = `clients:${user.id}:${page}:${limit}:${status || 'all'}:${search || 'none'}`;
-
-    try {
-      // Try to get cached data
-      const cachedData = await this.cacheManager.get(cacheKey);
-      if (cachedData) {
-        return cachedData;
-      } else {
-        console.log(
-          'All clients data not found in cache, fetching from database.',
-        );
-      }
-    } catch (cacheError) {
-      console.error('Cache GET Error:', cacheError);
-    }
 
     const qb = this._clientRepo
       .createQueryBuilder('client')
@@ -92,8 +67,6 @@ export class ClientsService {
       limit: Number(limit),
       totalPages: Math.ceil(total / Number(limit)),
     };
-
-    await this.cacheManager.set(cacheKey, result, 360000);
 
     return result;
   }

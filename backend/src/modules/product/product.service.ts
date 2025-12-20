@@ -1,9 +1,4 @@
-import {
-  HttpStatus,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
@@ -13,15 +8,12 @@ import { ProductStock } from 'src/shared/enum/enum.type';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { AddStockDto } from './dto/add-stock-product.dto';
 import dayjs from 'dayjs';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly _productRepo: Repository<Product>,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
   async createProduct(createProductDto: CreateProductDto) {
     const productExist = await this._productRepo.findOne({
@@ -42,7 +34,6 @@ export class ProductService {
 
     product.lastRestock = dayjs().toDate();
     await this._productRepo.save(product);
-    await this.cacheManager.clear();
     return {
       HttpStatus: HttpStatus.CREATED,
       message: 'Produit ajouté avec success',
@@ -51,22 +42,7 @@ export class ProductService {
 
   async findAllProducts(query: ProductQueryDto) {
     const { limit = 10, page = 1, category, search, status } = query;
-    // Cache key
-    const cacheKey = `products:${page}:${limit}:${status || 'all'}:${search || 'none'}`;
 
-    try {
-      // Try to get cached data
-      const cachedData = await this.cacheManager.get(cacheKey);
-      if (cachedData) {
-        return cachedData;
-      } else {
-        console.log(
-          'All products data not found in cache, fetching from database.',
-        );
-      }
-    } catch (cacheError) {
-      console.error('Cache GET Error:', cacheError);
-    }
     const qb = this._productRepo
       .createQueryBuilder('product')
       .leftJoin('product.category', 'category')
@@ -111,8 +87,6 @@ export class ProductService {
       totalPages: Math.ceil(total / Number(limit)),
     };
 
-    await this.cacheManager.set(cacheKey, result, 360000);
-
     return result;
   }
 
@@ -123,7 +97,6 @@ export class ProductService {
 
     if (product) {
       await this._productRepo.update(id, updateProductDto);
-      await this.cacheManager.clear();
       return {
         status: HttpStatus.OK,
         success: 'Produit mis à jour avec success',
@@ -143,7 +116,6 @@ export class ProductService {
     product.status = this.computeStockStatus(product.quantity);
 
     await this._productRepo.save(product);
-    await this.cacheManager.clear();
     return {
       status: HttpStatus.OK,
       success: 'Stock mis à jour avec succès',
@@ -158,7 +130,6 @@ export class ProductService {
     }
 
     await this._productRepo.softDelete(product.id);
-    await this.cacheManager.clear();
     return {
       status: HttpStatus.OK,
       success: 'Produit supprimé avec success',
