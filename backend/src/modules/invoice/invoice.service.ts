@@ -61,9 +61,9 @@ export class InvoiceService {
 
       const numero = await generateNumero({
         repo: this._invoiceRepo,
-        dateColumn: 'dueDate',
+        dateColumn: 'createdAt',
         numberColumn: 'invoiceNo',
-        padding: 4,
+        padding: 3,
       });
 
       // Create invoice entity

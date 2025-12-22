@@ -87,4 +87,13 @@ export class CreateInvoiceDto {
   @IsOptional()
   @IsEnum(InvoicePaymentStatus)
   status?: InvoicePaymentStatus;
+
+  @ApiProperty({
+    example: 'Thanks for your purchase!',
+    required: false,
+    description: 'Optional notes on invoice',
+  })
+  @IsOptional()
+  @IsString()
+  invoiceNo?: string;
 }

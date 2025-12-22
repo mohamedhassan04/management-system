@@ -26,12 +26,15 @@ import { InvoiceQueryDto } from 'src/shared/dto/pagination-query.dto';
 import { CreateInvoiceDto } from '../invoice/dto/create-invoice.dto';
 import dayjs from 'dayjs';
 import { InvoiceService } from '../invoice/invoice.service';
+import { Invoice } from '../invoice/entities/invoice.entity';
 
 @Injectable()
 export class EstimateService {
   constructor(
     @InjectRepository(Estimate)
     private readonly _estimateRepository: Repository<Estimate>,
+    @InjectRepository(Invoice)
+    private readonly _invoiceRepository: Repository<Invoice>,
     private readonly _invoiceService: InvoiceService,
     private readonly dataSource: DataSource,
     private readonly mailerService: EmailService,
@@ -281,10 +284,18 @@ export class EstimateService {
       throw new NotFoundException('Email client introuvable');
     }
 
+    const numero = await generateNumero({
+      repo: this._invoiceRepository,
+      dateColumn: 'createdAt',
+      numberColumn: 'invoiceNo',
+      padding: 3,
+    });
+
     const createInvoiceDto: CreateInvoiceDto = {
       clientId: estimate.client.id,
       dueDate: dayjs(estimate.date).format('YYYY-MM-DD'),
       status: InvoicePaymentStatus.DRAFT,
+      invoiceNo: numero,
       notes: `Facture générée depuis le devis ${estimate.estimateNo}`,
       items: estimate.items.map((item) => ({
         productId: item.product.id,

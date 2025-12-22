@@ -18,6 +18,7 @@ export async function generateNumero<T>(
 
   const lastItem = await repo
     .createQueryBuilder('e')
+    .withDeleted()
     .where(`EXTRACT(YEAR FROM e.${dateColumn}) = :year`, { year })
     .andWhere(`EXTRACT(MONTH FROM e.${dateColumn}) = :month`, {
       month: Number(month),
