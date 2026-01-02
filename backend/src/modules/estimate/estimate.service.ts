@@ -180,6 +180,10 @@ export class EstimateService {
 
     const estimateFile = await this.generateEstimatePdf(estimate);
 
+    estimate.status = EstimateStatus.SENT;
+
+    await this._estimateRepository.save(estimate);
+
     await this.mailerService.sendEstimateEmail(
       estimateFile,
       estimate?.client?.email,

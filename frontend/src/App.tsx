@@ -5,6 +5,7 @@ import DashboardLayout from "./layout/DashboardLayout";
 import ProtectedRoute from "./apis/utils/ProtectedRoute";
 import { notification } from "antd";
 import Estimate from "./screens/estimate/Estimate";
+import Dashboard from "./screens/dashboard/Dashboard";
 
 const Login = lazy(() => import("./screens/login/Login"));
 const Clients = lazy(() => import("./screens/users/Clients"));
@@ -28,7 +29,7 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="/dashboard" element={<h1>Dashboard</h1>} />
+            <Route path="/dashboard" element={<Dashboard api={api} />} />
             <Route path="/users" element={<Clients api={api} />} />
             <Route path="/products" element={<Products api={api} />} />
             <Route path="/invoices" element={<Invoice api={api} />} />

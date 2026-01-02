@@ -29,6 +29,7 @@ export class AuthenticationService {
         id: user.id,
         email: loginUserDto.email,
         role: user.role,
+        name: user.firstName + ' ' + user.lastName,
       },
     };
     return {

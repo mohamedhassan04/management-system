@@ -98,3 +98,39 @@
 .payé .dot {
   background: variables.$color-green-primary;
 }
+
+.envoyé {
+  background: variables.$color-orange-light;
+  color: variables.$color-orage-primary;
+}
+
+.envoyé .dot {
+  background: variables.$color-orage-primary;
+}
+
+.accepté {
+  background: variables.$color-green-light;
+  color: variables.$color-green-primary;
+}
+
+.accepté .dot {
+  background: variables.$color-green-primary;
+}
+
+.refusé {
+  background: variables.$color-red-light;
+  color: variables.$color-red-primary;
+}
+
+.refusé .dot {
+  background: variables.$color-red-primary;
+}
+
+.facturé {
+  background: variables.$color-primary-purple-extra-light;
+  color: variables.$color-primary-purple;
+}
+
+.facturé .dot {
+  background: variables.$color-primary-purple;
+}

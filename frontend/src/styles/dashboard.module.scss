@@ -1,0 +1,19 @@
+@use "./variables";
+@use "./mixins";
+
+.ms--dashboard-title {
+  @include fluid-font(1.5, 2);
+  @include color($text: variables.$color-gray-dark);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-semibold !important;
+  font-variation-settings: "wght" variables.$font-weight-semibold !important;
+  font-style: italic;
+  span {
+    @include fluid-font(1.5, 2);
+    font-family: variables.$font-family-ibm !important;
+    font-weight: variables.$font-weight-semibold !important;
+    font-variation-settings: "wght" variables.$font-weight-semibold !important;
+    font-style: italic;
+    text-transform: capitalize;
+  }
+}

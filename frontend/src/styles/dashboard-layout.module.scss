@@ -105,6 +105,7 @@
 // ----- Header style ----
 
 .ms--header-container {
+  margin-top: 1rem;
   @include flex(null, flex-end, center);
 }
 
@@ -140,4 +141,32 @@
 
 .ms--header-badge {
   @include flex(center, center);
+}
+
+.ms--header-user {
+  @include flex(null, null, null, 0.9rem);
+  cursor: pointer;
+}
+
+.ms--header-user-info {
+  @include flex(column, null, null, 0.3rem);
+  flex-direction: column;
+  line-height: 1;
+}
+
+.ms--header-user-name {
+  @include color($text: variables.$color-black-mate !important);
+  @include fluid-font(0.6, 0.9);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-semibold !important;
+  font-variation-settings: "wght" variables.$font-weight-semibold !important;
+  text-transform: capitalize;
+}
+
+.ms--header-user-role {
+  @include color($text: variables.$color-gray-dark !important);
+  @include fluid-font(0.4, 0.7);
+  font-family: variables.$font-family-ibm !important;
+  font-weight: variables.$font-weight-medium !important;
+  font-variation-settings: "wght" variables.$font-weight-medium !important;
 }
