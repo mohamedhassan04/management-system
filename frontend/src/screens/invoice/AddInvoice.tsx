@@ -45,7 +45,7 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
 
   const subtotal = useMemo(
     () => items.reduce((acc, item) => acc + item.qty * item.price, 0),
-    [items]
+    [items],
   );
   const tax =
     subtotal *
@@ -64,7 +64,7 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
   const updateItem = <K extends keyof InvoiceItem>(
     index: number,
     field: K,
-    value: InvoiceItem[K]
+    value: InvoiceItem[K],
   ) => {
     const updated = [...items];
     updated[index][field] = value;
@@ -238,7 +238,7 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
                         updateItem(
                           i,
                           "taxRate",
-                          Number(selectedProduct.taxRate) || 0
+                          Number(selectedProduct.taxRate) || 0,
                         );
                       }
                     }}
@@ -263,7 +263,7 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({
                       updateItem(
                         i,
                         "qty",
-                        isNaN(value) ? 1 : Math.max(1, value)
+                        isNaN(value) ? 1 : Math.max(1, value),
                       );
                     }}
                   />

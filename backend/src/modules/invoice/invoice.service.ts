@@ -9,7 +9,11 @@ import { Invoice } from './entities/invoice.entity';
 import { DataSource, In, Repository } from 'typeorm';
 import { InvoiceItem } from './entities/invoice-item.entity';
 import { Product } from '../product/entities/product.entity';
-import { InvoicePaymentStatus, ProductStock } from 'src/shared/enum/enum.type';
+import {
+  ClientStatus,
+  InvoicePaymentStatus,
+  ProductStock,
+} from 'src/shared/enum/enum.type';
 import dayjs from 'dayjs';
 import * as path from 'path';
 import * as pdf from 'html-pdf';
@@ -44,6 +48,9 @@ export class InvoiceService {
         });
         if (!client) {
           throw new NotFoundException('Client introuvable');
+        }
+        if (client?.status === ClientStatus.INACTIVE) {
+          throw new BadRequestException('Cette compte client est désactivé');
         }
       }
 

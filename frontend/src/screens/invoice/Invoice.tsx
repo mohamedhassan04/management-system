@@ -88,8 +88,7 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
     } catch (error) {
       api.error({
         message: "Erreur d'ajout",
-        description:
-          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        description: (error as any)?.data?.message || "Une erreur est survenue",
         placement: "bottomRight",
       });
     }
@@ -105,8 +104,7 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
     } catch (error) {
       api.error({
         message: "Erreur de génération",
-        description:
-          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        description: (error as any)?.data?.message || "Une erreur est survenue",
         placement: "bottomRight",
       });
     }
@@ -124,8 +122,7 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
     } catch (error) {
       api.error({
         message: "Erreur de génération",
-        description:
-          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        description: (error as any)?.data?.message || "Une erreur est survenue",
         placement: "bottomRight",
       });
     }
@@ -139,11 +136,10 @@ const Invoice: React.FC<InvoiceProps> = ({ api }) => {
         description: "La facture a été supprimé avec succès.",
         placement: "bottomRight",
       });
-    } catch (error) {
+    } catch (error: any) {
       api.error({
-        message: "Erreur de suppression",
-        description:
-          (error as any)?.data?.message[0] || "Une erreur est survenue",
+        message: "Erreur de génération",
+        description: error?.data?.message || "Une erreur est survenue",
         placement: "bottomRight",
       });
     }
